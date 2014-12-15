@@ -92,6 +92,8 @@ public abstract class BasePlugin implements IPlugin {
 	private String translateParameterTypeName(String className) {
 		switch (className) {
 		case "Integer":
+		case "Double":
+		case "Float":
 			return "Number";
 
 		case "String":
