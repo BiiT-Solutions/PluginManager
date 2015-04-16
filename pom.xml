@@ -6,6 +6,7 @@
 	<version>0.0.2</version>
 	<name>Plugin Manager</name>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<jspf.version>1.0.2</jspf.version>
 	</properties>
