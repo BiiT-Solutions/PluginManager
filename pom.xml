@@ -1,22 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit.plugins</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>Plugin Manager</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<jspf.version>1.0.2</jspf.version>
-	</properties>
+
 	<distributionManagement>
 		<repository>
 			<id>central</id>
 			<name>biit-releases</name>
 			<url>https://dev.biit-solutions.com:8443/mavenartifactory/ext-release-local</url>
 		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://dev.biit-solutions.com:8443/mavenartifactory/libs-snapshot</url>
+		</snapshotRepository>
 	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:dev.biit-solutions.com:PluginManager.git</connection>
+		<developerConnection>scm:git:dev.biit-solutions.com:PluginManager.git</developerConnection>
+		<tag>plugin-manager</tag>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<jspf.version>1.0.2</jspf.version>
+		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
+		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+		<project.scm.id>git</project.scm.id>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.xeoh</groupId>
@@ -24,6 +43,7 @@
 			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -33,6 +53,28 @@
 				<configuration>
 					<source>7</source>
 					<target>7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>${maven-scm-provider-gitexe.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<checkModificationExcludes>
+						<checkModificationExclude>pom.xml</checkModificationExclude>
+					</checkModificationExcludes>
 				</configuration>
 			</plugin>
 		</plugins>
