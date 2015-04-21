@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 import com.biit.plugins.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.exceptions.MethodInvocationException;
 import com.biit.plugins.exceptions.NoMethodFoundException;
@@ -19,12 +17,11 @@ import com.biit.plugins.interfaces.IPlugin;
  * 
  */
 
-@PluginImplementation
 public abstract class BasePlugin implements IPlugin {
 
 	private Map<String, Method> methodsMap;
 
-	public BasePlugin() {
+	protected BasePlugin() {
 		methodsMap = new HashMap<String, Method>();
 		List<Method> pluginMethods = getPluginMethods();
 		for (Method pluginMethod : pluginMethods) {
@@ -107,8 +104,7 @@ public abstract class BasePlugin implements IPlugin {
 	}
 
 	/**
-	 * Return true if the parameters passed match the parameters that the method
-	 * requires
+	 * Return true if the parameters passed match the parameters that the method requires
 	 * 
 	 * @param method
 	 * @param pameters
@@ -116,7 +112,7 @@ public abstract class BasePlugin implements IPlugin {
 	 */
 	protected boolean areParametersMatching(Method method, Object... parameters) {
 		int parameterNumber = 0;
-		if(method.getParameterTypes().length != parameters.length){
+		if (method.getParameterTypes().length != parameters.length) {
 			return false;
 		}
 		for (Class<?> methodParameter : method.getParameterTypes()) {
