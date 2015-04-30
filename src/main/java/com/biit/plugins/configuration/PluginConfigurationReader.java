@@ -1,12 +1,48 @@
 package com.biit.plugins.configuration;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.biit.logger.BiitCommonLogger;
 import com.biit.utils.configuration.ConfigurationReader;
+import com.biit.utils.configuration.PropertiesSourceFile;
 
 public class PluginConfigurationReader extends ConfigurationReader {
+	protected static final String SETTINGS_FILE = "settings.conf";
+	private Class<?> pluginConfigurationClass;
+
+	/**
+	 * Load settings from defaults folders, conf with plugin jar or system variables.
+	 * 
+	 * @param pluginConfigurationClass
+	 */
+	public PluginConfigurationReader(Class<?> pluginConfigurationClass) {
+		this.pluginConfigurationClass = pluginConfigurationClass;
+
+		BiitCommonLogger.debug(this.getClass(), "Loading default settings file...");
+		addPropertiesSource(new PropertiesSourceFile(SETTINGS_FILE));
+
+		String settingsFile = getJarName();
+		BiitCommonLogger.debug(this.getClass(), "Loading settings file " + settingsFile);
+		// Load settings as resource.
+		if (settingsFile != null) {
+			// using same name as jar file.
+			if (resourceExist(settingsFile + ".conf")) {
+				addPropertiesSource(new PropertiesSourceFile(settingsFile + ".conf"));
+				BiitCommonLogger.debug(this.getClass(), "Plugin using settings in resource folder '" + settingsFile
+						+ ".conf" + "'.");
+			}
+		}
+		// Load settings as file.
+		settingsFile = getJarFolder() + "/" + getJarName() + ".conf";
+		BiitCommonLogger.debug(this.getClass(), "Searching for configuration file in '" + settingsFile + "'.");
+		if (fileExists(settingsFile)) {
+			addPropertiesSource(new PropertiesSourceFile(getJarFolder(), getJarName() + ".conf"));
+			BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsFile + "'!");
+		}
+
+	}
 
 	private URL getJarUrl() {
 		URL url = this.getClass().getResource('/' + this.getClass().getName().replace('.', '/') + ".class");
@@ -44,8 +80,19 @@ public class PluginConfigurationReader extends ConfigurationReader {
 				settingsUrl.getPath().length() - ".jar".length());
 	}
 
-	public PluginConfigurationReader() {
+	private boolean fileExists(String filePathString) {
+		File f = new File(filePathString);
+		return (f.exists() && !f.isDirectory());
+	}
 
+	private boolean resourceExist(String resourceName) {
+		URL url;
+		if (pluginConfigurationClass != null) {
+			url = pluginConfigurationClass.getClassLoader().getResource(resourceName);
+		} else {
+			url = PluginConfigurationReader.class.getClassLoader().getResource(resourceName);
+		}
+		return url != null;
 	}
 
 }
