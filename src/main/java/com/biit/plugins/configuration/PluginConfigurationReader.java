@@ -13,7 +13,8 @@ public class PluginConfigurationReader extends ConfigurationReader {
 	private Class<?> pluginConfigurationClass;
 
 	/**
-	 * Load settings from defaults folders, conf with plugin jar or system variables.
+	 * Load settings from defaults folders, conf with plugin jar or system
+	 * variables.
 	 * 
 	 * @param pluginConfigurationClass
 	 */
@@ -24,14 +25,13 @@ public class PluginConfigurationReader extends ConfigurationReader {
 		addPropertiesSource(new PropertiesSourceFile(SETTINGS_FILE));
 
 		String settingsFile = getJarName();
-		BiitCommonLogger.debug(this.getClass(), "Loading settings file " + settingsFile);
+		BiitCommonLogger.debug(this.getClass(), "Loading settings file '" + settingsFile + "'.");
 		// Load settings as resource.
 		if (settingsFile != null) {
 			// using same name as jar file.
 			if (resourceExist(settingsFile + ".conf")) {
 				addPropertiesSource(new PropertiesSourceFile(settingsFile + ".conf"));
-				BiitCommonLogger.debug(this.getClass(), "Plugin using settings in resource folder '" + settingsFile
-						+ ".conf" + "'.");
+				BiitCommonLogger.debug(this.getClass(), "Plugin using settings in resource folder '" + settingsFile + ".conf" + "'.");
 			}
 		}
 		// Load settings as file.
@@ -76,8 +76,7 @@ public class PluginConfigurationReader extends ConfigurationReader {
 		if (settingsUrl == null || !settingsUrl.getPath().contains(".jar")) {
 			return null;
 		}
-		return settingsUrl.getPath().substring(settingsUrl.getPath().lastIndexOf('/') + 1,
-				settingsUrl.getPath().length() - ".jar".length());
+		return settingsUrl.getPath().substring(settingsUrl.getPath().lastIndexOf('/') + 1, settingsUrl.getPath().length() - ".jar".length());
 	}
 
 	private boolean fileExists(String filePathString) {
