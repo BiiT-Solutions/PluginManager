@@ -67,11 +67,9 @@ public abstract class BasePlugin implements IPlugin {
 			if (componentType != null) {
 				// The parameter is an array
 				// We want the internal class of the array
-				parameters.add("Parameter " + parameterNumber + " - Any number of '"
-						+ translateParameterTypeName(componentType.getSimpleName()) + "'");
+				parameters.add("Parameter " + parameterNumber + " - Any number of '" + translateParameterTypeName(componentType.getSimpleName()) + "'");
 			} else {
-				parameters.add("Parameter " + parameterNumber + " - '"
-						+ translateParameterTypeName(parameter.getSimpleName()) + "'");
+				parameters.add("Parameter " + parameterNumber + " - '" + translateParameterTypeName(parameter.getSimpleName()) + "'");
 			}
 		}
 		if (parameterNumber == 0) {
@@ -104,7 +102,8 @@ public abstract class BasePlugin implements IPlugin {
 	}
 
 	/**
-	 * Return true if the parameters passed match the parameters that the method requires
+	 * Return true if the parameters passed match the parameters that the method
+	 * requires
 	 * 
 	 * @param method
 	 * @param pameters
@@ -141,23 +140,26 @@ public abstract class BasePlugin implements IPlugin {
 	}
 
 	@Override
-	public Object executeMethod(String methodName, Object... parameters) throws NoMethodFoundException,
-			InvalidMethodParametersException, MethodInvocationException {
+	public Object executeMethod(String methodName, Object... parameters) throws NoMethodFoundException, InvalidMethodParametersException,
+			MethodInvocationException {
 		Method methodFound = getMethod(methodName);
 		if (methodFound == null) {
 			throw new NoMethodFoundException("The method '" + methodName + "' was not found", methodName);
 		} else {
 			if (!areParametersMatching(methodFound, parameters)) {
-				throw new InvalidMethodParametersException("Invalid parameters for the method '" + methodName + "'",
-						methodName, parameters);
+				throw new InvalidMethodParametersException("Invalid parameters for the method '" + methodName + "'", methodName, parameters);
 			} else {
 				try {
 					return methodFound.invoke(this, parameters);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new MethodInvocationException("Exception invoking the method '" + methodName + "'",
-							methodName, parameters);
+					throw new MethodInvocationException("Exception invoking the method '" + methodName + "'", methodName, parameters);
 				}
 			}
 		}
+	}
+
+	@Override
+	public int compareTo(IPlugin plugin) {
+		return getPluginName().compareTo(plugin.getPluginName());
 	}
 }
