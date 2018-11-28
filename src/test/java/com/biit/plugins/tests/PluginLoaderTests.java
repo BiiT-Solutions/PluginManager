@@ -72,7 +72,8 @@ public class PluginLoaderTests {
 		pluginManager.loadPlugins();
 		pluginManager.startPlugins();
 
-		// retrieve all extensions for "Greeting" extension point
+		// IPLugin2 must be in the plugin. If not
+		// java.lang.InstantiationException appears.
 		List<IPlugin2> plugins = pluginManager.getExtensions(IPlugin2.class);
 		Assert.assertEquals(plugins.size(), 1);
 
