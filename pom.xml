@@ -47,6 +47,8 @@
 		<plugin.class>com.biit.plugins.helloworld.WelcomePlugin</plugin.class>
 		<plugin.version>${project.version}</plugin.version>
 		<plugin.provider>BiiT Solutions</plugin.provider>
+		<plugin2.id>methods-plugin</plugin2.id>
+		<plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
 		<plugin.dependencies></plugin.dependencies>
 	</properties>
 
@@ -136,7 +138,7 @@
 				<version>${maven-jar.version}</version>
 				<executions>
 					<execution>
-						<id>build-plugin-jar</id>
+						<id>build-helloworld-jar</id>
 						<phase>process-test-classes</phase>
 						<goals>
 							<goal>test-jar</goal>
@@ -161,6 +163,33 @@
 							</archive>
 						</configuration>
 					</execution>
+					<execution>
+						<id>build-plugin-jar</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/biit/plugins/generic/**/*</include>
+								<include>com/biit/plugins/test/interfaces/**/*</include>
+							</includes>
+							<finalName>base-plugin</finalName>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<addClasspath>true</addClasspath>
+								</manifest>
+								<manifestEntries>
+									<Plugin-Id>${plugin2.id}</Plugin-Id>
+									<Plugin-Version>${plugin.version}</Plugin-Version>
+									<Plugin-Provider>${plugin.provider}</Plugin-Provider>
+									<Plugin-Class>${plugin2.class}</Plugin-Class>
+									<Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -171,9 +200,12 @@
 						<phase>process-test-classes</phase>
 						<configuration>
 							<target>
-								<!-- copy database scripts -->
+								<!-- copy plugins jar -->
 								<copy todir="src/test/plugins/" overwrite="true">
 									<fileset dir="target/" includes="**/hello-world-plugin*.jar" />
+								</copy>
+								<copy todir="src/test/plugins/" overwrite="true">
+									<fileset dir="target/" includes="**/base-plugin-tests*.jar" />
 								</copy>
 							</target>
 						</configuration>

@@ -20,6 +20,7 @@ import com.biit.plugins.interfaces.IPlugin;
  */
 @Extension
 public abstract class BasePlugin implements IPlugin {
+	private final static String METHODS_PREFIX_TO_SELECT = "method";
 	private Map<String, Method> methodsMap;
 
 	public BasePlugin() {
@@ -37,7 +38,7 @@ public abstract class BasePlugin implements IPlugin {
 	public List<Method> getPluginMethods() {
 		List<Method> methods = new ArrayList<Method>();
 		for (Method method : this.getClass().getMethods()) {
-			if (method.getName().startsWith("method")) {
+			if (method.getName().startsWith(METHODS_PREFIX_TO_SELECT)) {
 				methods.add(method);
 			}
 		}
