@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" verbose="1" name="FormResultRunnerCore">
+	<test name="FormResultRunner" enabled="true" preserve-order="true">
+		<groups>
+			<run>
+				<include name="pluginLoader" />
+			</run>
+		</groups>
+		<classes>
+			<class name="com.biit.plugins.tests.PluginLoaderTests" />
+		</classes>
+	</test>
+</suite>

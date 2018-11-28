@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>0.1.36-SNAPSHOT</version>
+	<version>0.2.1-SNAPSHOT</version>
 	<name>Plugin Manager</name>
 
 	<distributionManagement>
@@ -31,27 +32,73 @@
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
 		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-jar.version>2.4</maven-jar.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+		<testng.version>6.14.3</testng.version>
 		<project.scm.id>git</project.scm.id>
-		<jspf.version>1.0.2</jspf.version>
+		<pf4j.version>2.4.0</pf4j.version>
 		<!-- Biit Dependencies -->
 		<biit-commons.version>[0.4,0.5)</biit-commons.version>
+		<!-- Plugin definition -->
+		<plugin.id>hello-world</plugin.id>
+		<plugin.class>com.biit.plugins.helloworld.WelcomePlugin</plugin.class>
+		<plugin.version>${project.version}</plugin.version>
+		<plugin.provider>BiiT Solutions</plugin.provider>
+		<plugin.dependencies></plugin.dependencies>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>net.xeoh</groupId>
-			<artifactId>jspf.core</artifactId>
-			<version>${jspf.version}</version>
+			<groupId>org.pf4j</groupId>
+			<artifactId>pf4j</artifactId>
+			<version>${pf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.biit</groupId>
 			<artifactId>common-utils</artifactId>
 			<version>${biit-commons.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<useSystemClassLoader>false</useSystemClassLoader>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -82,6 +129,59 @@
 						<checkModificationExclude>pom.xml</checkModificationExclude>
 					</checkModificationExcludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar.version}</version>
+				<executions>
+					<execution>
+						<id>build-plugin-jar</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/biit/plugins/helloworld/**/*</include>
+							</includes>
+							<finalName>hello-world-plugin</finalName>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<addClasspath>true</addClasspath>
+								</manifest>
+								<manifestEntries>
+									<Plugin-Id>${plugin.id}</Plugin-Id>
+									<Plugin-Version>${plugin.version}</Plugin-Version>
+									<Plugin-Provider>${plugin.provider}</Plugin-Provider>
+									<Plugin-Class>${plugin.class}</Plugin-Class>
+									<Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>${maven-antrun-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>process-test-classes</phase>
+						<configuration>
+							<target>
+								<!-- copy database scripts -->
+								<copy todir="src/test/plugins/" overwrite="true">
+									<fileset dir="target/" includes="**/hello-world-plugin*.jar" />
+								</copy>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
