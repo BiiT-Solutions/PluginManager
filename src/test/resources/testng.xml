@@ -4,10 +4,12 @@
 		<groups>
 			<run>
 				<include name="pluginLoader" />
+				<include name="pluginController" />
 			</run>
 		</groups>
 		<classes>
 			<class name="com.biit.plugins.tests.PluginLoaderTests" />
+			<class name="com.biit.plugins.tests.PluginControllerTests" />
 		</classes>
 	</test>
 </suite>

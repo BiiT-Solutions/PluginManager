@@ -143,15 +143,15 @@ public abstract class BasePlugin implements IPlugin {
 			MethodInvocationException {
 		Method methodFound = getMethod(methodName);
 		if (methodFound == null) {
-			throw new NoMethodFoundException("The method '" + methodName + "' was not found", methodName);
+			throw new NoMethodFoundException("The method '" + methodName + "' was not found");
 		} else {
 			if (!areParametersMatching(methodFound, parameters)) {
-				throw new InvalidMethodParametersException("Invalid parameters for the method '" + methodName + "'", methodName, parameters);
+				throw new InvalidMethodParametersException("Invalid parameters '" + parameters + "' for the method '" + methodName + "'");
 			} else {
 				try {
 					return methodFound.invoke(this, parameters);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new MethodInvocationException("Exception invoking the method '" + methodName + "'", methodName, parameters);
+					throw new MethodInvocationException("Exception invoking the method '" + methodName + "' with parameters '" + parameters + "'.");
 				}
 			}
 		}

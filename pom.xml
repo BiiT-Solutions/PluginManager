@@ -49,6 +49,8 @@
 		<plugin.provider>BiiT Solutions</plugin.provider>
 		<plugin2.id>methods-plugin</plugin2.id>
 		<plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
+		<plugin3.id>another-plugin</plugin3.id>
+		<plugin3.class>com.biit.plugins.another.AnotherPlugin</plugin3.class>
 		<plugin.dependencies></plugin.dependencies>
 	</properties>
 
@@ -186,6 +188,33 @@
 									<Plugin-Version>${plugin.version}</Plugin-Version>
 									<Plugin-Provider>${plugin.provider}</Plugin-Provider>
 									<Plugin-Class>${plugin2.class}</Plugin-Class>
+									<Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>build-another-jar</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/biit/plugins/another/**/*</include>
+								<include>com/biit/plugins/test/interfaces/**/*</include>
+							</includes>
+							<finalName>another-plugin</finalName>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<addClasspath>true</addClasspath>
+								</manifest>
+								<manifestEntries>
+									<Plugin-Id>${plugin3.id}</Plugin-Id>
+									<Plugin-Version>${plugin.version}</Plugin-Version>
+									<Plugin-Provider>${plugin.provider}</Plugin-Provider>
+									<Plugin-Class>${plugin3.class}</Plugin-Class>
 									<Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
 								</manifestEntries>
 							</archive>

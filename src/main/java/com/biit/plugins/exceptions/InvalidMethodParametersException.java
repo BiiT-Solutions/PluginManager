@@ -1,21 +1,9 @@
 package com.biit.plugins.exceptions;
 
-public class InvalidMethodParametersException extends Exception {
+public class InvalidMethodParametersException extends MethodInvocationException {
 	private static final long serialVersionUID = 2781594922476539377L;
-	String methodName;
-	Object[] parameters;
 
-	public InvalidMethodParametersException(String message, String methodName, Object[] parameters) {
+	public InvalidMethodParametersException(String message) {
 		super(message);
-		this.methodName = methodName;
-		this.parameters = parameters;
-	}
-	
-	public String getMethodName(){
-		return methodName;
-	}
-	
-	public Object[] getParameters(){
-		return parameters;
 	}
 }
