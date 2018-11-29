@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pf4j.Extension;
-
 import com.biit.plugins.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.exceptions.MethodInvocationException;
 import com.biit.plugins.exceptions.NoMethodFoundException;
@@ -18,7 +16,6 @@ import com.biit.plugins.interfaces.IPlugin;
  * The plugins that will extend this class
  * 
  */
-@Extension
 public abstract class BasePlugin implements IPlugin {
 	private final static String METHODS_PREFIX_TO_SELECT = "method";
 	private Map<String, Method> methodsMap;
