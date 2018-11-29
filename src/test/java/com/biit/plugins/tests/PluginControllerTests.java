@@ -1,5 +1,7 @@
 package com.biit.plugins.tests;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -21,6 +23,9 @@ import com.biit.plugins.test.interfaces.IPlugin3;
 @Test(groups = { "pluginController" })
 public class PluginControllerTests {
 	private final static String PLUGINS_FOLDER = "src/test/plugins";
+	private final static String ANOTHER_PLUGIN_ID = "another-plugin";
+	private final static String ANOTHER_PLUGIN_METHOD = "methodGetGreeting";
+	private final static String ANOTHER_PLUGIN_METHOD_RETURN = "Another greeting";
 
 	@Test
 	public void loadIPlugin() throws NoPluginFoundException, DuplicatedPluginFoundException {
@@ -71,5 +76,15 @@ public class PluginControllerTests {
 
 		// stop and unload all plugins
 		pluginManager.stopPlugins();
+	}
+
+	@Test
+	public void helloWorldPluginSelectionTest1() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoPluginFoundException, DuplicatedPluginFoundException {
+		// Calling the first plugin
+		IPlugin3 pluginInterface = PluginController.getInstance().getPlugin(IPlugin3.class, ANOTHER_PLUGIN_ID);
+		Assert.assertNotNull(pluginInterface);
+		Method method = pluginInterface.getPluginMethod(ANOTHER_PLUGIN_METHOD);
+		Assert.assertEquals(method.invoke(pluginInterface), ANOTHER_PLUGIN_METHOD_RETURN);
 	}
 }

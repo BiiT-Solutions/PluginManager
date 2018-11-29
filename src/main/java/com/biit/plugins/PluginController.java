@@ -64,9 +64,10 @@ public class PluginController {
 		pluginManager.startPlugins();
 	}
 
-	public <T extends IPlugin> T getPlugins(Class<T> pluginInterface, String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
+	public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
 		PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
 		for (T plugin : getPlugins(pluginInterface)) {
+			PluginManagerLogger.debug(this.getClass().getName(), "Existing plugin '" + plugin.getPluginName() + "'.");
 			if (plugin.getPluginName().equalsIgnoreCase(pluginName)) {
 				return plugin;
 			}
@@ -111,12 +112,15 @@ public class PluginController {
 	 * @throws InvalidMethodParametersException
 	 * @throws NoMethodFoundException
 	 */
-	public Object executePluginMethod(String pluginName, String methodName, Object... parameters) throws NoPluginFoundException,
-			DuplicatedPluginFoundException, NoMethodFoundException, InvalidMethodParametersException, MethodInvocationException {
+	public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName, String methodName, Object... parameters)
+			throws NoPluginFoundException, DuplicatedPluginFoundException, NoMethodFoundException, InvalidMethodParametersException, MethodInvocationException {
 		try {
 			PluginManagerLogger.debug(this.getClass().getName(), "Executing '" + methodName + "' with parameters '" + Arrays.toString(parameters) + "'.");
-			IPlugin pluginInterface = getPlugin(pluginName);
-			return pluginInterface.executeMethod(methodName, parameters);
+			T plugin = getPlugin(pluginInterface, pluginName);
+			if (plugin == null) {
+				throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
+			}
+			return plugin.executeMethod(methodName, parameters);
 		} catch (IllegalArgumentException e) {
 			StringBuilder sb = new StringBuilder();
 			for (Object parameter : parameters) {

@@ -7,25 +7,20 @@ import com.biit.plugins.BasePlugin;
 @Extension
 public class AnotherPluginsExtension extends BasePlugin implements AnotherDefintions {
 
-	public String getGreeting() {
-		return "Welcome";
+	@Override
+	public String methodGetGreeting() {
+		return "Another greeting";
 	}
 
+	@Override
 	public String getPluginName() {
-		return "methods-plugin";
+		return "another-plugin";
 	}
 
 	/**
 	 * Methods that starts with "method" are selectables.
 	 */
 	public void methodOne() {
-		return;
-	}
-
-	/**
-	 * Methods that starts with "method" are selectables.
-	 */
-	public void methodTwo() {
 		return;
 	}
 }
