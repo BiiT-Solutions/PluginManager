@@ -1,6 +1,7 @@
 package com.biit.plugins;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -130,5 +131,24 @@ public class PluginController {
 			PluginManagerLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
+	}
+
+	public boolean existsPlugins() {
+		try {
+			return !getPlugins(IPlugin.class).isEmpty();
+		} catch (NoPluginFoundException e) {
+			return false;
+		} catch (DuplicatedPluginFoundException e) {
+			return true;
+		}
+	}
+
+	public List<IPlugin> getAllPlugins() {
+		try {
+			return getPlugins(IPlugin.class);
+		} catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
+			PluginManagerLogger.errorMessage(this.getClass().getName(), e);
+		}
+		return new ArrayList<IPlugin>();
 	}
 }
