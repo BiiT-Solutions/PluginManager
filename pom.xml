@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.1</version>
 	<name>Plugin Manager</name>
 
 	<distributionManagement>
@@ -23,7 +22,7 @@
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:PluginManager.git</connection>
 		<developerConnection>scm:git:git.biit-solutions.com:PluginManager.git</developerConnection>
-		<tag>plugin-manager</tag>
+		<tag>plugin-manager-0.2.1</tag>
 	</scm>
 
 	<properties>
@@ -51,7 +50,7 @@
 		<plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
 		<plugin3.id>another-plugin</plugin3.id>
 		<plugin3.class>com.biit.plugins.another.AnotherPlugin</plugin3.class>
-		<plugin.dependencies></plugin.dependencies>
+		<plugin.dependencies />
 	</properties>
 
 	<dependencies>
