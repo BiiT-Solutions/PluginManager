@@ -40,7 +40,7 @@
 		<project.scm.id>git</project.scm.id>
 		<pf4j.version>2.4.0</pf4j.version>
 		<!-- Biit Dependencies -->
-		<biit-commons.version>[0.4,0.5)</biit-commons.version>
+		<biit-commons.version>[1.0,1.1)</biit-commons.version>
 		<!-- Plugin definition -->
 		<plugin.id>hello-world</plugin.id>
 		<plugin.class>com.biit.plugins.helloworld.WelcomePlugin</plugin.class>
