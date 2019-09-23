@@ -14,9 +14,7 @@ import org.pf4j.PluginManager;
 
 import com.biit.plugins.configuration.PluginManagerConfigurationReader;
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
-import com.biit.plugins.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.exceptions.MethodInvocationException;
-import com.biit.plugins.exceptions.NoMethodFoundException;
 import com.biit.plugins.exceptions.NoPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.logger.PluginManagerLogger;
@@ -65,8 +63,10 @@ public class PluginController {
 		pluginManager.startPlugins();
 	}
 
-	public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
-		PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
+	public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
+			throws NoPluginFoundException, DuplicatedPluginFoundException {
+		PluginManagerLogger.debug(this.getClass().getName(),
+				"Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
 		for (T plugin : getPlugins(pluginInterface)) {
 			PluginManagerLogger.debug(this.getClass().getName(), "Existing plugin '" + plugin.getPluginName() + "'.");
 			if (plugin.getPluginName().equalsIgnoreCase(pluginName)) {
@@ -76,7 +76,8 @@ public class PluginController {
 		return null;
 	}
 
-	public <T extends IPlugin> List<T> getPlugins(Class<T> pluginInterface) throws NoPluginFoundException, DuplicatedPluginFoundException {
+	public <T extends IPlugin> List<T> getPlugins(Class<T> pluginInterface)
+			throws NoPluginFoundException, DuplicatedPluginFoundException {
 		PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginInterface + "'.");
 		return pluginManager.getExtensions(pluginInterface);
 	}
@@ -95,41 +96,39 @@ public class PluginController {
 
 	/**
 	 * Executes the method of the plugin specified.<br>
-	 * It takes any number of parameters and passes them to the method
-	 * invocation.
+	 * It takes any number of parameters and passes them to the method invocation.
 	 * 
-	 * @param interfaceName
-	 *            interface of the plugin.
-	 * @param pluginName
-	 *            name of the plugin.
-	 * @param methodName
-	 *            method to be used.
-	 * @param parameters
-	 *            parameters of the method.
+	 * @param interfaceName interface of the plugin.
+	 * @param pluginName    name of the plugin.
+	 * @param methodName    method to be used.
+	 * @param parameters    parameters of the method.
 	 * @return the result of the execution of the plugin method.
 	 * @throws NoPluginFoundException
 	 * @throws DuplicatedPluginFoundException
 	 * @throws MethodInvocationException
 	 */
-	public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName, String methodName, Object... parameters)
+	public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
+			String methodName, Object... parameters)
 			throws NoPluginFoundException, DuplicatedPluginFoundException, MethodInvocationException {
 		try {
 			try {
-				PluginManagerLogger.debug(this.getClass().getName(), "Executing '" + methodName + "' with parameters '" + Arrays.toString(parameters) + "'.");
+				PluginManagerLogger.debug(this.getClass().getName(),
+						"Executing '" + methodName + "' with parameters '" + Arrays.toString(parameters) + "'.");
 				T plugin = getPlugin(pluginInterface, pluginName);
 				if (plugin == null) {
 					throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
 				}
 				return plugin.executeMethod(methodName, parameters);
-			} catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException | MethodInvocationException e) {
 				StringBuilder sb = new StringBuilder();
 				for (Object parameter : parameters) {
 					sb.append(parameter + " (" + parameter.getClass().getName() + ")");
 				}
-				PluginManagerLogger.severe(this.getClass().getName(), "No plugin method found '" + methodName + "' with parameters '" + sb.toString() + "'.");
+				PluginManagerLogger.severe(this.getClass().getName(),
+						"No plugin method found '" + methodName + "' with parameters '" + sb.toString() + "'.");
 				PluginManagerLogger.errorMessage(this.getClass().getName(), e);
 			}
-		} catch (NoPluginFoundException | DuplicatedPluginFoundException | MethodInvocationException e) {
+		} catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
 			PluginManagerLogger.errorMessage(this.getClass().getName(), e);
 			throw e;
 		}
