@@ -6,4 +6,8 @@ public class MethodInvocationException extends Exception {
 	public MethodInvocationException(String message) {
 		super(message);
 	}
+
+	public MethodInvocationException(String message, Throwable e) {
+		super(message, e);
+	}
 }

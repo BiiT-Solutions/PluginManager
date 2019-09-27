@@ -66,9 +66,11 @@ public abstract class BasePlugin implements IPlugin {
 			if (componentType != null) {
 				// The parameter is an array
 				// We want the internal class of the array
-				parameters.add("Parameter " + parameterNumber + " - Any number of '" + translateParameterTypeName(componentType.getSimpleName()) + "'");
+				parameters.add("Parameter " + parameterNumber + " - Any number of '"
+						+ translateParameterTypeName(componentType.getSimpleName()) + "'");
 			} else {
-				parameters.add("Parameter " + parameterNumber + " - '" + translateParameterTypeName(parameter.getSimpleName()) + "'");
+				parameters.add("Parameter " + parameterNumber + " - '"
+						+ translateParameterTypeName(parameter.getSimpleName()) + "'");
 			}
 		}
 		if (parameterNumber == 0) {
@@ -139,19 +141,22 @@ public abstract class BasePlugin implements IPlugin {
 	}
 
 	@Override
-	public Object executeMethod(String methodName, Object... parameters) throws NoMethodFoundException, InvalidMethodParametersException,
-			MethodInvocationException {
+	public Object executeMethod(String methodName, Object... parameters)
+			throws NoMethodFoundException, InvalidMethodParametersException, MethodInvocationException {
 		Method methodFound = getMethod(methodName);
 		if (methodFound == null) {
 			throw new NoMethodFoundException("The method '" + methodName + "' was not found");
 		} else {
 			if (!areParametersMatching(methodFound, parameters)) {
-				throw new InvalidMethodParametersException("Invalid parameters '" + parameters + "' for the method '" + methodName + "'");
+				throw new InvalidMethodParametersException(
+						"Invalid parameters '" + parameters + "' for the method '" + methodName + "'");
 			} else {
 				try {
 					return methodFound.invoke(this, parameters);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new MethodInvocationException("Exception invoking the method '" + methodName + "' with parameters '" + parameters + "'.");
+					throw new MethodInvocationException(
+							"Exception invoking the method '" + methodName + "' with parameters '" + parameters + "'.",
+							e);
 				}
 			}
 		}
