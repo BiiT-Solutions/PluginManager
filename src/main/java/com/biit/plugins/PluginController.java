@@ -125,7 +125,7 @@ public class PluginController {
 					sb.append(parameter + " (" + parameter.getClass().getName() + ")");
 				}
 				PluginManagerLogger.severe(this.getClass().getName(),
-						"No plugin method found '" + methodName + "' with parameters '" + sb.toString() + "'.");
+						"No plugin method found or error executing '" + methodName + "' with parameters '" + sb.toString() + "'.");
 				PluginManagerLogger.errorMessage(this.getClass().getName(), e);
 			}
 		} catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
