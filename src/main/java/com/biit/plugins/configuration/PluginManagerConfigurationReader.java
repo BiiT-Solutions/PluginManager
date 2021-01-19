@@ -21,8 +21,6 @@ public class PluginManagerConfigurationReader extends ConfigurationReader {
 	/**
 	 * Load settings from defaults folders, conf with plugin jar or system
 	 * variables.
-	 * 
-	 * @param pluginConfigurationClass
 	 */
 	private PluginManagerConfigurationReader() {
 		super();
