@@ -98,7 +98,7 @@ public class PluginController {
 	 * Executes the method of the plugin specified.<br>
 	 * It takes any number of parameters and passes them to the method invocation.
 	 * 
-	 * @param interfaceName interface of the plugin.
+	 * @param pluginInterface interface of the plugin.
 	 * @param pluginName    name of the plugin.
 	 * @param methodName    method to be used.
 	 * @param parameters    parameters of the method.
