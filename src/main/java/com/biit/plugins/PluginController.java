@@ -1,31 +1,23 @@
 package com.biit.plugins;
 
+import com.biit.plugins.configuration.PluginManagerConfigurationReader;
+import com.biit.plugins.exceptions.*;
+import com.biit.plugins.interfaces.IPlugin;
+import com.biit.plugins.logger.PluginManagerLogger;
+import org.pf4j.*;
+
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.pf4j.DefaultPluginManager;
-import org.pf4j.JarPluginLoader;
-import org.pf4j.ManifestPluginDescriptorFinder;
-import org.pf4j.PluginDescriptorFinder;
-import org.pf4j.PluginLoader;
-import org.pf4j.PluginManager;
-
-import com.biit.plugins.configuration.PluginManagerConfigurationReader;
-import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
-import com.biit.plugins.exceptions.MethodInvocationException;
-import com.biit.plugins.exceptions.NoPluginFoundException;
-import com.biit.plugins.interfaces.IPlugin;
-import com.biit.plugins.logger.PluginManagerLogger;
-
 /**
  * Singleton in charge of managing the plugins of the application
- * 
+ *
  */
 public class PluginController {
-	private static PluginController instance = new PluginController();
-	private PluginManager pluginManager;
+	private static final PluginController instance = new PluginController();
+	private final PluginManager pluginManager;
 
 	public static PluginController getInstance() {
 		return instance;
@@ -70,6 +62,7 @@ public class PluginController {
 		for (T plugin : getPlugins(pluginInterface)) {
 			PluginManagerLogger.debug(this.getClass().getName(), "Existing plugin '" + plugin.getPluginName() + "'.");
 			if (plugin.getPluginName().equalsIgnoreCase(pluginName)) {
+                PluginManagerLogger.debug(this.getClass().getName(), "Found plugin '" + plugin.getPluginName() + "'.");
 				return plugin;
 			}
 		}
@@ -97,7 +90,7 @@ public class PluginController {
 	/**
 	 * Executes the method of the plugin specified.<br>
 	 * It takes any number of parameters and passes them to the method invocation.
-	 * 
+	 *
 	 * @param pluginInterface interface of the plugin.
 	 * @param pluginName    name of the plugin.
 	 * @param methodName    method to be used.
@@ -105,11 +98,9 @@ public class PluginController {
 	 * @return the result of the execution of the plugin method.
 	 * @throws NoPluginFoundException
 	 * @throws DuplicatedPluginFoundException
-	 * @throws MethodInvocationException
 	 */
 	public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
-			String methodName, Object... parameters)
-			throws NoPluginFoundException, DuplicatedPluginFoundException, MethodInvocationException {
+			String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
 		try {
 			try {
 				PluginManagerLogger.debug(this.getClass().getName(),
@@ -119,13 +110,21 @@ public class PluginController {
 					throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
 				}
 				return plugin.executeMethod(methodName, parameters);
-			} catch (IllegalArgumentException | MethodInvocationException e) {
+			} catch (MethodInvocationException e) {
 				StringBuilder sb = new StringBuilder();
 				for (Object parameter : parameters) {
-					sb.append(parameter + " (" + parameter.getClass().getName() + ")");
+					sb.append(parameter).append(" (").append(parameter.getClass().getName()).append(")");
 				}
-				PluginManagerLogger.severe(this.getClass().getName(),
-						"No plugin method found or error executing '" + methodName + "' with parameters '" + sb.toString() + "'.");
+                if (e instanceof NoMethodFoundException) {
+                    PluginManagerLogger.severe(this.getClass().getName(),
+                            "No plugin method found '" + methodName + "' with parameters '" + sb.toString() + "'.");
+                } else if (e instanceof InvalidMethodParametersException) {
+                    PluginManagerLogger.severe(this.getClass().getName(),
+                            "Invalid parameters on '" + methodName + "' with parameters '" + sb.toString() + "'.");
+                } else {
+                    PluginManagerLogger.severe(this.getClass().getName(),
+                            "Exception invoking method '" + methodName + "' with parameters '" + sb.toString() + "'.");
+                }
 				PluginManagerLogger.errorMessage(this.getClass().getName(), e);
 			}
 		} catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
