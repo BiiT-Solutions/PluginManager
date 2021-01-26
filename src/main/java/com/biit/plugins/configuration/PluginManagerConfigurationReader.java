@@ -10,7 +10,7 @@ import com.biit.utils.configuration.exceptions.PropertyNotFoundException;
 import com.biit.utils.file.watcher.FileWatcher.FileModifiedListener;
 
 public class PluginManagerConfigurationReader extends ConfigurationReader {
-	protected static final String SETTINGS_FILE = "settings.conf";
+	private static final String SETTINGS_FILE = "settings.conf";
 	private static final String PLUGINS_SYSTEM_VARIABLE_CONFIG = "PLUGINS_CONFIG";
 
 	private static final String PLUGINS_PATH_PROPERTY_NAME = "drools.plugins.path";
