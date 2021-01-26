@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>0.2.13-SNAPSHOT</version>
+	<version>0.2.14-SNAPSHOT</version>
 	<name>Plugin Manager</name>
 
 	<distributionManagement>
