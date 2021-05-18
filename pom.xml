@@ -21,7 +21,7 @@
 
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</connection>
-		<connection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</developerConnection>
+		<developerConnection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</developerConnection>
 		<tag>plugin-manager</tag>
 	</scm>
 
