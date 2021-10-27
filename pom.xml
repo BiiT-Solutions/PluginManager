@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>Plugin Manager</name>
 
 	<distributionManagement>
@@ -22,7 +22,7 @@
 	<scm>
 		<connection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</connection>
 		<developerConnection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</developerConnection>
-		<tag>plugin-manager</tag>
+		<tag>plugin-manager-1.0.1</tag>
 	</scm>
 
 	<properties>
