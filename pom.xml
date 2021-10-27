@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>plugin-manager</artifactId>
-	<version>0.2.17-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Plugin Manager</name>
 
 	<distributionManagement>
@@ -35,12 +35,11 @@
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 		<maven-jar.version>2.4</maven-jar.version>
 		<slf4j.version>1.7.25</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
 		<testng.version>6.14.3</testng.version>
 		<project.scm.id>git</project.scm.id>
 		<pf4j.version>2.4.0</pf4j.version>
 		<!-- Biit Dependencies -->
-		<biit-commons.version>[1.0,1.1)</biit-commons.version>
+		<biit-commons.version>[1.1,1.2)</biit-commons.version>
 		<!-- Plugin definition -->
 		<plugin.id>hello-world</plugin.id>
 		<plugin.class>com.biit.plugins.helloworld.WelcomePlugin</plugin.class>
@@ -80,11 +79,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
 

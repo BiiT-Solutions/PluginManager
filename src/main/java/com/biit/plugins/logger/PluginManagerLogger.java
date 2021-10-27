@@ -1,12 +1,13 @@
 package com.biit.plugins.logger;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Defines basic log behavior. Uses log4j.properties.
  */
 public class PluginManagerLogger {
-	private static final Logger logger = Logger.getLogger(PluginManagerLogger.class);
+	private static final Logger logger = LoggerFactory.getLogger(PluginManagerLogger.class);
 
 	private PluginManagerLogger() {
 	}
