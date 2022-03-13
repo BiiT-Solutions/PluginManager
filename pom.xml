@@ -1,17 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.biit</groupId>
     <artifactId>plugin-manager</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>Plugin Manager</name>
 
     <parent>
         <groupId>com.biit</groupId>
         <artifactId>versions</artifactId>
         <version>[0.1,0.2)</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <distributionManagement>
@@ -30,7 +29,7 @@
     <scm>
         <connection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</developerConnection>
-        <tag>plugin-manager</tag>
+        <tag>plugin-manager-1.0.2</tag>
     </scm>
 
     <properties>
@@ -43,7 +42,7 @@
         <plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
         <plugin3.id>another-plugin</plugin3.id>
         <plugin3.class>com.biit.plugins.another.AnotherPlugin</plugin3.class>
-        <plugin.dependencies/>
+        <plugin.dependencies />
     </properties>
 
     <dependencies>
@@ -214,10 +213,10 @@
                             <target>
                                 <!-- copy plugins jar -->
                                 <copy todir="src/test/plugins/" overwrite="true">
-                                    <fileset dir="target/" includes="**/hello-world-plugin*.jar"/>
+                                    <fileset dir="target/" includes="**/hello-world-plugin*.jar" />
                                 </copy>
                                 <copy todir="src/test/plugins/" overwrite="true">
-                                    <fileset dir="target/" includes="**/base-plugin-tests*.jar"/>
+                                    <fileset dir="target/" includes="**/base-plugin-tests*.jar" />
                                 </copy>
                             </target>
                         </configuration>
