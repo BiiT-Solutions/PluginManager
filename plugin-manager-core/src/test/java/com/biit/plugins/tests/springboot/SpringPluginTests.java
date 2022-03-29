@@ -1,7 +1,7 @@
 package com.biit.plugins.tests.springboot;
 
 import com.biit.plugins.springboot.SpringTestPluginApplication;
-import com.biit.plugins.springboot.TestPluginController;
+import com.biit.plugins.springboot.plugin.TestPluginController;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;

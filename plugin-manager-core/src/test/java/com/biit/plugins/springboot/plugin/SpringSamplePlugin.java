@@ -3,7 +3,6 @@ package com.biit.plugins.springboot.plugin;
 import com.biit.plugins.BasePlugin;
 import com.biit.plugins.configuration.ApplicationConfiguration;
 import com.biit.plugins.logger.PluginManagerLogger;
-import com.biit.plugins.springboot.TestPluginController;
 import org.pf4j.Extension;
 import org.pf4j.PluginWrapper;
 import org.pf4j.spring.SpringPlugin;
@@ -23,6 +22,7 @@ public class SpringSamplePlugin extends SpringPlugin {
     @Override
     public void start() {
         PluginManagerLogger.info(this.getClass().getName(), "Spring Sample plugin.start()");
+        super.start();
     }
 
     @Override
