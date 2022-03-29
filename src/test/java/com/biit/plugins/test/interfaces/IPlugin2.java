@@ -1,9 +1,0 @@
-package com.biit.plugins.test.interfaces;
-
-import org.pf4j.ExtensionPoint;
-
-import com.biit.plugins.interfaces.IPlugin;
-
-public interface IPlugin2 extends ExtensionPoint, IPlugin {
-
-}

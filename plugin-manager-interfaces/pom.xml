@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.biit</groupId>
+    <artifactId>plugin-manager-interfaces</artifactId>
+    <name>Plugin Manager (Interfaces)</name>
+
+    <parent>
+        <groupId>com.biit</groupId>
+        <artifactId>plugin-manager</artifactId>
+        <version>2.0.1-SNAPSHOT</version>
+    </parent>
+
+    <scm>
+        <connection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</connection>
+        <developerConnection>scm:git:git.biit-solutions.com:BiiT/PluginManager.git</developerConnection>
+        <tag>plugin-manager</tag>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.pf4j</groupId>
+            <artifactId>pf4j</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+</project>
