@@ -52,7 +52,7 @@ public class TestPluginControllerTests {
 			Assert.assertEquals(plugin.getPluginMethods().size(), 2);
 		}
 
-		// IPLugin3 must be in the plugin. If not
+		// IPlugin3 must be in the plugin. If not
 		// java.lang.InstantiationException appears.
 		List<IPlugin3> plugins3 = PluginController.getInstance().getPlugins(IPlugin3.class);
 		Assert.assertEquals(plugins3.size(), 1);
@@ -63,7 +63,8 @@ public class TestPluginControllerTests {
 
 		// Load all toghether
 		List<IPlugin> plugins1 = PluginController.getInstance().getPlugins(IPlugin.class);
-		Assert.assertEquals(plugins1.size(), 2);
+		//IPlugin2, IPlugin3, ISpringPlugin extends IPlugin
+		Assert.assertEquals(plugins1.size(), 3);
 
 		for (IPlugin plugin : plugins1) {
 			Assert.assertEquals(plugin.getPluginMethods().size(), 2);

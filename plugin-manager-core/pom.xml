@@ -28,6 +28,8 @@
         <plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
         <plugin3.id>another-plugin</plugin3.id>
         <plugin3.class>com.biit.plugins.another.AnotherPlugin</plugin3.class>
+        <spring-boot-plugin.id>another-plugin</spring-boot-plugin.id>
+        <spring-boot-plugin.class>com.biit.plugins.another.AnotherPlugin</spring-boot-plugin.class>
         <plugin.dependencies/>
     </properties>
 
@@ -217,6 +219,58 @@
                                 </manifestEntries>
                             </archive>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>spring-boot-plugin</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>com/biit/plugins/springboot/plugin/**/*</include>
+                            </includes>
+                            <finalName>spring-boot-plugin</finalName>
+                            <archive>
+                                <index>true</index>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                </manifest>
+                                <manifestEntries>
+                                    <Plugin-Id>${spring-boot-plugin.id}</Plugin-Id>
+                                    <Plugin-Version>${plugin.version}</Plugin-Version>
+                                    <Plugin-Provider>${plugin.provider}</Plugin-Provider>
+                                    <Plugin-Class>${spring-boot-plugin.class}</Plugin-Class>
+                                    <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <configuration>
+                            <target>
+                                <!-- copy plugins jar -->
+                                <copy todir="src/test/plugins/" overwrite="true">
+                                    <fileset dir="target/" includes="**/hello-world-plugin*.jar" />
+                                </copy>
+                                <copy todir="src/test/plugins/" overwrite="true">
+                                    <fileset dir="target/" includes="**/base-plugin-tests*.jar" />
+                                </copy>
+                                <copy todir="src/test/plugins/" overwrite="true">
+                                    <fileset dir="target/" includes="**/spring-boot-plugin-tests*.jar" />
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

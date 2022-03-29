@@ -1,4 +1,4 @@
-package com.biit.plugins.springboot;
+package com.biit.plugins.springboot.plugin;
 
 public class GreetingsProvider {
 

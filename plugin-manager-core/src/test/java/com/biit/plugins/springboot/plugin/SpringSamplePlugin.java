@@ -1,7 +1,9 @@
-package com.biit.plugins.springboot;
+package com.biit.plugins.springboot.plugin;
 
+import com.biit.plugins.BasePlugin;
 import com.biit.plugins.configuration.ApplicationConfiguration;
 import com.biit.plugins.logger.PluginManagerLogger;
+import com.biit.plugins.springboot.TestPluginController;
 import org.pf4j.Extension;
 import org.pf4j.PluginWrapper;
 import org.pf4j.spring.SpringPlugin;
@@ -39,14 +41,14 @@ public class SpringSamplePlugin extends SpringPlugin {
     }
 
     @Extension(ordinal = 1)
-    public static class SpringPlugin implements SpringGreetingPlugin {
+    public static class SpringPlugin extends BasePlugin implements SpringGreetingPlugin {
 
         @Autowired
         private GreetingsProvider greetProvider;
 
 
         @Override
-        public String getGreeting() {
+        public String methodGetGreeting() {
             return greetProvider.provide();
         }
 
@@ -55,6 +57,17 @@ public class SpringSamplePlugin extends SpringPlugin {
             return new ArrayList<Object>() {{
                 add(new TestPluginController());
             }};
+        }
+
+        public String getPluginName() {
+            return "SpringBootPlugin";
+        }
+
+        /**
+         * Methods that starts with "method" are selectables.
+         */
+        public void methodOne() {
+            return;
         }
     }
 
