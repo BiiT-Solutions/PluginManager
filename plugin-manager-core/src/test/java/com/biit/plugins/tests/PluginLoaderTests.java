@@ -1,6 +1,8 @@
 package com.biit.plugins.tests;
 
+import com.biit.plugins.PluginController;
 import com.biit.plugins.helloworld.Greeting;
+import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
 import com.biit.plugins.springboot.SpringTestPluginApplication;
 import com.biit.plugins.test.interfaces.IPlugin2;
@@ -13,6 +15,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -24,6 +27,10 @@ public class PluginLoaderTests extends AbstractTestNGSpringContextTests {
     @Autowired
     private PluginManager pluginManager;
 
+    @Autowired
+    private PluginController pluginController;
+
+
     @Test
     public void loadPlugin() {
         // retrieve all extensions for "Greeting" extension point
@@ -34,6 +41,13 @@ public class PluginLoaderTests extends AbstractTestNGSpringContextTests {
         for (Greeting plugin : plugins) {
             Assert.assertEquals(plugin.getGreeting(), "Welcome");
         }
+    }
+
+    @Test
+    public void loadPlugins() {
+        Map<Class<?>, List<?>> plugins = pluginController.getAllPlugins();
+        Assert.assertEquals(plugins.get(IPlugin.class).size(), 2);
+        Assert.assertEquals(plugins.get(ISpringPlugin.class).size(), 1);
     }
 
     @Test

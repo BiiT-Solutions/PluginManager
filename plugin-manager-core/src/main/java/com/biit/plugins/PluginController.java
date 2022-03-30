@@ -2,19 +2,22 @@ package com.biit.plugins;
 
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
+import com.biit.plugins.interfaces.ISpringPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
 import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;
 import com.biit.plugins.interfaces.exceptions.NoPluginFoundException;
 import com.biit.plugins.logger.PluginManagerLogger;
+import org.pf4j.ExtensionPoint;
 import org.pf4j.PluginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Singleton in charge of managing the plugins of the application
@@ -59,13 +62,13 @@ public class PluginController {
         return null;
     }
 
-    public <T extends IPlugin> List<T> getPlugins(Class<T> pluginInterface)
+    public <T extends ExtensionPoint> List<T> getPlugins(Class<T> pluginInterface)
             throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginInterface + "'.");
         return pluginManager.getExtensions(pluginInterface);
     }
 
-    public IPlugin getPlugin(String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
+    public ExtensionPoint getPlugin(String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginName + "'.");
         List<?> plugins = pluginManager.getExtensions(pluginName);
         if (plugins.isEmpty()) {
@@ -74,7 +77,7 @@ public class PluginController {
         if (plugins.size() > 1) {
             throw new DuplicatedPluginFoundException("Several plugins with name '" + pluginName + "' found.");
         }
-        return (IPlugin) plugins.iterator().next();
+        return (ExtensionPoint) plugins.iterator().next();
     }
 
     /**
@@ -135,12 +138,18 @@ public class PluginController {
         }
     }
 
-    public List<IPlugin> getAllPlugins() {
+    public Map<Class<?>, List<?>> getAllPlugins() {
+        Map<Class<?>, List<?>> pluginsFound = new HashMap<>();
         try {
-            return getPlugins(IPlugin.class);
+            pluginsFound.put(IPlugin.class, getPlugins(IPlugin.class));
         } catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
             PluginManagerLogger.errorMessage(this.getClass().getName(), e);
         }
-        return new ArrayList<IPlugin>();
+        try {
+            pluginsFound.put(ISpringPlugin.class, getPlugins(ISpringPlugin.class));
+        } catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
+            PluginManagerLogger.errorMessage(this.getClass().getName(), e);
+        }
+        return pluginsFound;
     }
 }
