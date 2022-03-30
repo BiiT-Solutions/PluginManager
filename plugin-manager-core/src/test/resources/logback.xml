@@ -30,7 +30,7 @@
     </appender>
 
     <!-- Custom ones -->
-    <logger name="com.biit.plugins.logger.PluginManagerLogger" additivity="false" level="INFO">
+    <logger name="com.biit.plugins.logger.PluginManagerLogger" additivity="false" level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>

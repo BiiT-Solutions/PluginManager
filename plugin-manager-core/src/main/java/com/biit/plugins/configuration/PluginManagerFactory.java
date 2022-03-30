@@ -24,14 +24,12 @@ public class PluginManagerFactory {
     }
 
     private PluginManager getSpringBootPluginManager() {
-        PluginManager pluginManager = new SpringPluginManager();
         PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsLocations + "' for plugins.");
         System.setProperty("pf4j.pluginsDir", pluginsLocations);
+        PluginManager pluginManager = new SpringPluginManager();
         pluginManager.loadPlugins();
         pluginManager.startPlugins();
-        PluginManagerLogger.debug(this.getClass().getName(), "Plugins found '" + pluginManager.getPlugins() + "'.");
-        PluginManagerLogger.debug(this.getClass().getName(), "Resolved Plugins '" + pluginManager.getResolvedPlugins() + "'.");
-        PluginManagerLogger.debug(this.getClass().getName(), "Started plugins '" + pluginManager.getStartedPlugins() + "'.");
+        PluginManagerLogger.info(this.getClass().getName(), "Folder for searching is '" + pluginManager.getPluginsRoots() + "'.");
         return pluginManager;
     }
 

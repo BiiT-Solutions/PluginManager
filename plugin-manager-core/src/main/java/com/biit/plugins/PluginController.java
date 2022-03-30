@@ -11,6 +11,7 @@ import org.pf4j.PluginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +25,24 @@ public class PluginController {
     @Autowired
     private final PluginManager pluginManager;
 
+    //For compatibility in old rules
+    private static PluginController instance;
+
     public PluginController(PluginManager pluginManager) {
         this.pluginManager = pluginManager;
+    }
+
+    @PostConstruct
+    public void assignInstance() {
+        setInstance(this);
+    }
+
+    public synchronized  static void setInstance(PluginController pluginController) {
+        PluginController.instance = pluginController;
+    }
+
+    public static PluginController getInstance() {
+        return instance;
     }
 
     public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
@@ -80,6 +97,7 @@ public class PluginController {
                         "Executing '" + methodName + "' with parameters '" + Arrays.toString(parameters) + "'.");
                 T plugin = getPlugin(pluginInterface, pluginName);
                 if (plugin == null) {
+                    PluginManagerLogger.warning(this.getClass().getName(), "No plugin exists with name '" + pluginName + "'.");
                     throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
                 }
                 return plugin.executeMethod(methodName, parameters);
