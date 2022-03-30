@@ -1,7 +1,7 @@
 package com.biit.plugins.springboot.plugin;
 
-import com.biit.plugins.BasePlugin;
-import com.biit.plugins.configuration.ApplicationConfiguration;
+import com.biit.plugins.SpringBasePlugin;
+import com.biit.plugins.configuration.PluginManagerFactory;
 import com.biit.plugins.logger.PluginManagerLogger;
 import org.pf4j.Extension;
 import org.pf4j.PluginWrapper;
@@ -35,13 +35,13 @@ public class SpringSamplePlugin extends SpringPlugin {
     protected ApplicationContext createApplicationContext() {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
         applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
-        applicationContext.register(ApplicationConfiguration.class);
+        applicationContext.register(PluginManagerFactory.class);
         applicationContext.refresh();
         return applicationContext;
     }
 
     @Extension(ordinal = 1)
-    public static class SpringPlugin extends BasePlugin implements SpringGreetingPlugin {
+    public static class SpringPlugin extends SpringBasePlugin implements SpringGreetingPlugin {
 
         @Autowired
         private GreetingsProvider greetProvider;

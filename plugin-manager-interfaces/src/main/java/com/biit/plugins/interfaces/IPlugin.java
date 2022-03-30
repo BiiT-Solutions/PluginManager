@@ -1,8 +1,6 @@
 package com.biit.plugins.interfaces;
 
-import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
-import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;
 import org.pf4j.ExtensionPoint;
 
 import java.lang.reflect.Method;
@@ -18,5 +16,5 @@ public interface IPlugin extends ExtensionPoint, Comparable<IPlugin> {
 
 	Method getPluginMethod(String methodName, Class<?>... parameterTypes) throws NoSuchMethodException;
 
-	Object executeMethod(String methodName, Object... parameters) throws NoMethodFoundException, InvalidMethodParametersException, MethodInvocationException;
+	Object executeMethod(String methodName, Object... parameters) throws  MethodInvocationException;
 }
