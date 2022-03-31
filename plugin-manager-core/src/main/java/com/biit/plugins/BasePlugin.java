@@ -150,4 +150,9 @@ public abstract class BasePlugin implements IPlugin {
     public int compareTo(IPlugin plugin) {
         return getPluginName().compareTo(plugin.getPluginName());
     }
+
+    @Override
+    public String toString() {
+        return getPluginName();
+    }
 }
