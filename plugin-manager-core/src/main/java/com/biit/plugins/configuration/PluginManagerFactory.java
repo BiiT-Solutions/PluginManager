@@ -27,8 +27,6 @@ public class PluginManagerFactory {
         PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsLocations + "' for plugins.");
         System.setProperty("pf4j.pluginsDir", pluginsLocations);
         PluginManager pluginManager = new SpringPluginManager();
-        pluginManager.loadPlugins();
-        pluginManager.startPlugins();
         PluginManagerLogger.info(this.getClass().getName(), "Folder for searching is '" + pluginManager.getPluginsRoots() + "'.");
         return pluginManager;
     }
