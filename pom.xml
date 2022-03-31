@@ -1,17 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.biit</groupId>
     <artifactId>plugin-manager</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
     <name>Plugin Manager</name>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>com.biit</groupId>
         <artifactId>versions</artifactId>
         <version>[0.1,0.2)</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <modules>
+        <module>plugin-manager-interfaces</module>
+        <module>plugin-manager-core</module>
+    </modules>
 
     <distributionManagement>
         <repository>
@@ -32,76 +39,16 @@
         <tag>plugin-manager</tag>
     </scm>
 
-    <properties>
-        <!-- Plugin definition -->
-        <plugin.id>hello-world</plugin.id>
-        <plugin.class>com.biit.plugins.helloworld.WelcomePlugin</plugin.class>
-        <plugin.version>${project.version}</plugin.version>
-        <plugin.provider>BiiT Solutions</plugin.provider>
-        <plugin2.id>methods-plugin</plugin2.id>
-        <plugin2.class>com.biit.plugins.generic.MethodsPlugin</plugin2.class>
-        <plugin3.id>another-plugin</plugin3.id>
-        <plugin3.class>com.biit.plugins.another.AnotherPlugin</plugin3.class>
-        <plugin.dependencies />
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.pf4j</groupId>
-            <artifactId>pf4j</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.biit</groupId>
-            <artifactId>common-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <useFile>false</useFile>
-                    <trimStackTrace>false</trimStackTrace>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,116 +66,6 @@
                         <checkModificationExclude>pom.xml</checkModificationExclude>
                     </checkModificationExcludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>build-helloworld-jar</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>com/biit/plugins/helloworld/**/*</include>
-                            </includes>
-                            <finalName>hello-world-plugin</finalName>
-                            <archive>
-                                <index>true</index>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                </manifest>
-                                <manifestEntries>
-                                    <Plugin-Id>${plugin.id}</Plugin-Id>
-                                    <Plugin-Version>${plugin.version}</Plugin-Version>
-                                    <Plugin-Provider>${plugin.provider}</Plugin-Provider>
-                                    <Plugin-Class>${plugin.class}</Plugin-Class>
-                                    <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>build-plugin-jar</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>com/biit/plugins/generic/**/*</include>
-                                <include>com/biit/plugins/test/interfaces/**/*</include>
-                            </includes>
-                            <finalName>base-plugin</finalName>
-                            <archive>
-                                <index>true</index>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                </manifest>
-                                <manifestEntries>
-                                    <Plugin-Id>${plugin2.id}</Plugin-Id>
-                                    <Plugin-Version>${plugin.version}</Plugin-Version>
-                                    <Plugin-Provider>${plugin.provider}</Plugin-Provider>
-                                    <Plugin-Class>${plugin2.class}</Plugin-Class>
-                                    <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>build-another-jar</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>com/biit/plugins/another/**/*</include>
-                                <include>com/biit/plugins/test/interfaces/**/*</include>
-                            </includes>
-                            <finalName>another-plugin</finalName>
-                            <archive>
-                                <index>true</index>
-                                <manifest>
-                                    <addClasspath>true</addClasspath>
-                                </manifest>
-                                <manifestEntries>
-                                    <Plugin-Id>${plugin3.id}</Plugin-Id>
-                                    <Plugin-Version>${plugin.version}</Plugin-Version>
-                                    <Plugin-Provider>${plugin.provider}</Plugin-Provider>
-                                    <Plugin-Class>${plugin3.class}</Plugin-Class>
-                                    <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven-antrun-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>process-test-classes</phase>
-                        <configuration>
-                            <target>
-                                <!-- copy plugins jar -->
-                                <copy todir="src/test/plugins/" overwrite="true">
-                                    <fileset dir="target/" includes="**/hello-world-plugin*.jar" />
-                                </copy>
-                                <copy todir="src/test/plugins/" overwrite="true">
-                                    <fileset dir="target/" includes="**/base-plugin-tests*.jar" />
-                                </copy>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
