@@ -2,6 +2,7 @@ package com.biit.plugins.configuration;
 
 import com.biit.logger.BiitCommonLogger;
 import com.biit.plugins.logger.PluginManagerLogger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,10 +29,13 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER = "PLUGIN_CONFIG_PATH";
     public static final String PLUGINS_CONFIG_FILES_EXTENSION = "conf";
     protected static final String SETTINGS_FILE = "settings.conf";
-
     private StringValueResolver resolver;
-
     private final Map<String, String> properties = new HashMap<>();
+    private final String pluginsLocations;
+
+    public PluginConfigurationReader(@Value("${plugins.directory:}") String pluginsLocations) {
+        this.pluginsLocations = pluginsLocations;
+    }
 
 
     @Override
@@ -82,6 +86,13 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
                 BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "'!");
             }
         });
+        getSystemConfigurationSettings().forEach(settingsSystemFile -> {
+            if (fileExists(settingsSystemFile)) {
+                loadPropertiesFileAbsolutePath(settingsSystemFile);
+                BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "' on folder '" +
+                        System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
+            }
+        });
     }
 
     private String getSettingsFileName() {
@@ -101,6 +112,27 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     }
 
     protected List<String> getConfigurationSettings() {
+        if (pluginsLocations != null) {
+            Path folder = Paths.get(pluginsLocations);
+            if (Files.isDirectory(folder)) {
+                try {
+                    // find files matched `png` file extension from folder C:\\test
+                    try (Stream<Path> walk = Files.walk(folder, 1)) {
+                        return walk
+                                .filter(p -> !Files.isDirectory(p))   // not a directory
+                                .map(p -> p.toString().toLowerCase()) // convert path to string
+                                .filter(f -> f.endsWith(PLUGINS_CONFIG_FILES_EXTENSION))       // check end with
+                                .collect(Collectors.toList());        // collect all matched to a List
+                    }
+                } catch (IOException e) {
+                    PluginManagerLogger.warning(this.getClass().getName(), "Invalid folder '" + folder + "'.");
+                }
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    protected List<String> getSystemConfigurationSettings() {
         if (System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
             Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
