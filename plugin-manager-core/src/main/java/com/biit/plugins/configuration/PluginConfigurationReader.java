@@ -16,14 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class PluginConfigurationReader implements EmbeddedValueResolverAware {
-    public static final String SYSTEM_VARIABLE = "PLUGIN_CONFIG_PATH";
+    public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER = "PLUGIN_CONFIG_PATH";
+    public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FILES = "PLUGIN_CONFIG_FILES";
     protected static final String SETTINGS_FILE = "settings.conf";
 
     private StringValueResolver resolver;
@@ -73,11 +73,12 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
             BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsFile + "'!");
         }
         //Load settings in system environment file path
-        final String settingsSystemFile = System.getProperty(getSystemVariableWithPath());
-        if (fileExists(settingsSystemFile)) {
-            loadPropertiesFileAbsolutePath(settingsSystemFile);
-            BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsFile + "'!");
-        }
+        getConfigurationSettings().forEach(settingsSystemFile -> {
+            if (fileExists(settingsSystemFile)) {
+                loadPropertiesFileAbsolutePath(settingsSystemFile);
+                BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "'!");
+            }
+        });
     }
 
     private String getSettingsFileName() {
@@ -96,8 +97,16 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         return file.exists() && !file.isDirectory();
     }
 
-    protected String getSystemVariableWithPath() {
-        return SYSTEM_VARIABLE;
+    protected List<String> getConfigurationSettings() {
+        String folder = System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER);
+        String filesDefinitions = System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FILES);
+        List<String> configurationFiles = new ArrayList<>();
+        if (filesDefinitions != null) {
+            List<String> files = Stream.of(filesDefinitions.split(",", -1))
+                    .collect(Collectors.toList());
+            files.forEach(file -> configurationFiles.add(folder + "/" + file));
+        }
+        return configurationFiles;
     }
 
     private void loadPropertiesFileInResources(String propertiesFile) {
@@ -122,7 +131,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         }
     }
 
-    private URL getJarUrl() {
+    protected URL getJarUrl() {
         URL url = this.getClass().getResource('/' + this.getClass().getName().replace('.', '/') + ".class");
         if (url == null) {
             return null;
