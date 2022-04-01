@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +26,7 @@ import java.util.stream.Stream;
 @Component
 public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER = "PLUGIN_CONFIG_PATH";
-    public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FILES = "PLUGIN_CONFIG_FILES";
+    public static final String PLUGINS_CONFIG_FILES_EXTENSION = "conf";
     protected static final String SETTINGS_FILE = "settings.conf";
 
     private StringValueResolver resolver;
@@ -98,15 +101,24 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     }
 
     protected List<String> getConfigurationSettings() {
-        String folder = System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER);
-        String filesDefinitions = System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FILES);
-        List<String> configurationFiles = new ArrayList<>();
-        if (filesDefinitions != null) {
-            List<String> files = Stream.of(filesDefinitions.split(",", -1))
-                    .collect(Collectors.toList());
-            files.forEach(file -> configurationFiles.add(folder + "/" + file));
+        if (System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
+            Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
+            if (Files.isDirectory(folder)) {
+                try {
+                    // find files matched `png` file extension from folder C:\\test
+                    try (Stream<Path> walk = Files.walk(folder, 1)) {
+                        return walk
+                                .filter(p -> !Files.isDirectory(p))   // not a directory
+                                .map(p -> p.toString().toLowerCase()) // convert path to string
+                                .filter(f -> f.endsWith(PLUGINS_CONFIG_FILES_EXTENSION))       // check end with
+                                .collect(Collectors.toList());        // collect all matched to a List
+                    }
+                } catch (IOException e) {
+                    PluginManagerLogger.warning(this.getClass().getName(), "Invalid folder '" + folder + "'.");
+                }
+            }
         }
-        return configurationFiles;
+        return new ArrayList<>();
     }
 
     private void loadPropertiesFileInResources(String propertiesFile) {
