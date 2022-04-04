@@ -1,7 +1,7 @@
 package com.biit.plugins;
 
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
-import com.biit.plugins.interfaces.ICommonPlugin;
+import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
@@ -46,7 +46,7 @@ public class PluginController {
         return instance;
     }
 
-    public <T extends ICommonPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
+    public <T extends IStandardPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
             throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(),
                 "Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
@@ -90,8 +90,8 @@ public class PluginController {
      * @throws NoPluginFoundException
      * @throws DuplicatedPluginFoundException
      */
-    public <T extends ICommonPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
-                                                                String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
+    public <T extends IStandardPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
+                                                                  String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
         try {
             try {
                 PluginManagerLogger.debug(this.getClass().getName(),
@@ -128,7 +128,7 @@ public class PluginController {
 
     public boolean existsPlugins() {
         try {
-            return !getPlugins(ICommonPlugin.class).isEmpty();
+            return !getPlugins(IStandardPlugin.class).isEmpty();
         } catch (NoPluginFoundException e) {
             return false;
         } catch (DuplicatedPluginFoundException e) {
@@ -139,7 +139,7 @@ public class PluginController {
     public Map<Class<?>, List<?>> getAllPluginsByClass() {
         Map<Class<?>, List<?>> pluginsFound = new HashMap<>();
         try {
-            pluginsFound.put(ICommonPlugin.class, getPlugins(ICommonPlugin.class));
+            pluginsFound.put(IStandardPlugin.class, getPlugins(IStandardPlugin.class));
         } catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
             PluginManagerLogger.errorMessage(this.getClass().getName(), e);
         }
@@ -163,9 +163,9 @@ public class PluginController {
         return new ArrayList<>();
     }
 
-    public List<ICommonPlugin> getAllCommonPlugins() {
+    public List<IStandardPlugin> getAllStandardPlugins() {
         try {
-            return getPlugins(ICommonPlugin.class);
+            return getPlugins(IStandardPlugin.class);
         } catch (NoPluginFoundException ignored) {
 
         } catch (DuplicatedPluginFoundException e) {

@@ -2,11 +2,11 @@ package com.biit.plugins.tests;
 
 import com.biit.plugins.PluginController;
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
-import com.biit.plugins.interfaces.ICommonPlugin;
+import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.exceptions.NoPluginFoundException;
 import com.biit.plugins.springboot.SpringTestPluginApplication;
-import com.biit.plugins.test.interfaces.ICommonPlugin2;
-import com.biit.plugins.test.interfaces.ICommonPlugin3;
+import com.biit.plugins.test.interfaces.IStandardPlugin2;
+import com.biit.plugins.test.interfaces.IStandardPlugin3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -33,28 +33,28 @@ public class TestPluginControllerTests extends AbstractTestNGSpringContextTests 
     public void loadIPlugin() throws NoPluginFoundException, DuplicatedPluginFoundException {
         // IPLugin2 must be in the plugin. If not
         // java.lang.InstantiationException appears.
-        List<ICommonPlugin2> plugins2 = pluginController.getPlugins(ICommonPlugin2.class);
+        List<IStandardPlugin2> plugins2 = pluginController.getPlugins(IStandardPlugin2.class);
         Assert.assertEquals(plugins2.size(), 1);
 
-        for (ICommonPlugin2 plugin : plugins2) {
+        for (IStandardPlugin2 plugin : plugins2) {
             Assert.assertEquals(plugin.getPluginMethods().size(), 2);
         }
 
         // IPlugin3 must be in the plugin. If not
         // java.lang.InstantiationException appears.
-        List<ICommonPlugin3> plugins3 = pluginController.getPlugins(ICommonPlugin3.class);
+        List<IStandardPlugin3> plugins3 = pluginController.getPlugins(IStandardPlugin3.class);
         Assert.assertEquals(plugins3.size(), 1);
 
-        for (ICommonPlugin3 plugin : plugins3) {
+        for (IStandardPlugin3 plugin : plugins3) {
             Assert.assertEquals(plugin.getPluginMethods().size(), 2);
         }
 
         // Load all toghether
-        List<ICommonPlugin> plugins1 = pluginController.getPlugins(ICommonPlugin.class);
+        List<IStandardPlugin> plugins1 = pluginController.getPlugins(IStandardPlugin.class);
         //IPlugin2, IPlugin3 extends IPlugin
         Assert.assertEquals(plugins1.size(), 2);
 
-        for (ICommonPlugin plugin : plugins1) {
+        for (IStandardPlugin plugin : plugins1) {
             Assert.assertEquals(plugin.getPluginMethods().size(), 2);
         }
     }
@@ -63,7 +63,7 @@ public class TestPluginControllerTests extends AbstractTestNGSpringContextTests 
     public void helloWorldPluginSelectionTest1() throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoPluginFoundException, DuplicatedPluginFoundException {
         // Calling the first plugin
-        ICommonPlugin3 pluginInterface = pluginController.getPlugin(ICommonPlugin3.class, ANOTHER_PLUGIN_ID);
+        IStandardPlugin3 pluginInterface = pluginController.getPlugin(IStandardPlugin3.class, ANOTHER_PLUGIN_ID);
         Assert.assertNotNull(pluginInterface);
         Method method = pluginInterface.getPluginMethod(ANOTHER_PLUGIN_METHOD);
         Assert.assertEquals(method.invoke(pluginInterface), ANOTHER_PLUGIN_METHOD_RETURN);

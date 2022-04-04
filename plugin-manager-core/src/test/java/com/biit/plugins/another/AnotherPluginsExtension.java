@@ -2,10 +2,10 @@ package com.biit.plugins.another;
 
 import org.pf4j.Extension;
 
-import com.biit.plugins.BaseCommonPlugin;
+import com.biit.plugins.BasePlugin;
 
 @Extension
-public class AnotherPluginsExtension extends BaseCommonPlugin implements AnotherDefintions {
+public class AnotherPluginsExtension extends BasePlugin implements AnotherDefintions {
 
 	@Override
 	public String methodGetGreeting() {
