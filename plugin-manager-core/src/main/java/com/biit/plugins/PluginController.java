@@ -1,6 +1,7 @@
 package com.biit.plugins;
 
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
+import com.biit.plugins.interfaces.ICommonPlugin;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Singleton in charge of managing the plugins of the application
@@ -40,7 +38,7 @@ public class PluginController {
         setInstance(this);
     }
 
-    public synchronized  static void setInstance(PluginController pluginController) {
+    public synchronized static void setInstance(PluginController pluginController) {
         PluginController.instance = pluginController;
     }
 
@@ -48,7 +46,7 @@ public class PluginController {
         return instance;
     }
 
-    public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
+    public <T extends ICommonPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
             throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(),
                 "Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
@@ -92,8 +90,8 @@ public class PluginController {
      * @throws NoPluginFoundException
      * @throws DuplicatedPluginFoundException
      */
-    public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
-                                                          String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
+    public <T extends ICommonPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
+                                                                String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
         try {
             try {
                 PluginManagerLogger.debug(this.getClass().getName(),
@@ -130,7 +128,7 @@ public class PluginController {
 
     public boolean existsPlugins() {
         try {
-            return !getPlugins(IPlugin.class).isEmpty();
+            return !getPlugins(ICommonPlugin.class).isEmpty();
         } catch (NoPluginFoundException e) {
             return false;
         } catch (DuplicatedPluginFoundException e) {
@@ -138,10 +136,10 @@ public class PluginController {
         }
     }
 
-    public Map<Class<?>, List<?>> getAllPlugins() {
+    public Map<Class<?>, List<?>> getAllPluginsByClass() {
         Map<Class<?>, List<?>> pluginsFound = new HashMap<>();
         try {
-            pluginsFound.put(IPlugin.class, getPlugins(IPlugin.class));
+            pluginsFound.put(ICommonPlugin.class, getPlugins(ICommonPlugin.class));
         } catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
             PluginManagerLogger.errorMessage(this.getClass().getName(), e);
         }
@@ -151,5 +149,41 @@ public class PluginController {
             PluginManagerLogger.errorMessage(this.getClass().getName(), e);
         }
         return pluginsFound;
+    }
+
+    public List<IPlugin> getAllPlugins() {
+        try {
+            return getPlugins(IPlugin.class);
+        } catch (NoPluginFoundException ignored) {
+
+        } catch (DuplicatedPluginFoundException e) {
+            PluginManagerLogger.severe(this.getClass().getName(), "Duplicated plugin found!");
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<ICommonPlugin> getAllCommonPlugins() {
+        try {
+            return getPlugins(ICommonPlugin.class);
+        } catch (NoPluginFoundException ignored) {
+
+        } catch (DuplicatedPluginFoundException e) {
+            PluginManagerLogger.severe(this.getClass().getName(), "Duplicated plugin found!");
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<ISpringPlugin> getAllSpringBootPlugins() {
+        try {
+            return getPlugins(ISpringPlugin.class);
+        } catch (NoPluginFoundException ignored) {
+
+        } catch (DuplicatedPluginFoundException e) {
+            PluginManagerLogger.severe(this.getClass().getName(), "Duplicated plugin found!");
+        }
+
+        return new ArrayList<>();
     }
 }

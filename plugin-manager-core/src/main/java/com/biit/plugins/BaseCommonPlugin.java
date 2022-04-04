@@ -1,6 +1,6 @@
 package com.biit.plugins;
 
-import com.biit.plugins.interfaces.IPlugin;
+import com.biit.plugins.interfaces.ICommonPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
 import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;
@@ -12,11 +12,11 @@ import java.util.*;
 /**
  * The plugins that will extend this class
  */
-public abstract class BasePlugin implements IPlugin {
+public abstract class BaseCommonPlugin implements ICommonPlugin {
     public final static String METHODS_PREFIX_TO_SELECT = "method";
     private Map<String, Method> methodsMap;
 
-    public BasePlugin() {
+    public BaseCommonPlugin() {
         methodsMap = new HashMap<>();
         List<Method> pluginMethods = getPluginMethods();
         for (Method pluginMethod : pluginMethods) {
@@ -147,7 +147,7 @@ public abstract class BasePlugin implements IPlugin {
     }
 
     @Override
-    public int compareTo(IPlugin plugin) {
+    public int compareTo(ICommonPlugin plugin) {
         return getPluginName().compareTo(plugin.getPluginName());
     }
 

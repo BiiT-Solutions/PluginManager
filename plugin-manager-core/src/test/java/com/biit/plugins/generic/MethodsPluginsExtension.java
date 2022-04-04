@@ -2,10 +2,10 @@ package com.biit.plugins.generic;
 
 import org.pf4j.Extension;
 
-import com.biit.plugins.BasePlugin;
+import com.biit.plugins.BaseCommonPlugin;
 
 @Extension
-public class MethodsPluginsExtension extends BasePlugin implements MethodsDefinitions {
+public class MethodsPluginsExtension extends BaseCommonPlugin implements MethodsDefinitions {
 
 	public String getGreeting() {
 		return "Welcome";

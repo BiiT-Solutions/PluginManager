@@ -1,7 +1,7 @@
 package com.biit.plugins.another;
 
-import com.biit.plugins.test.interfaces.IPlugin3;
+import com.biit.plugins.test.interfaces.ICommonPlugin3;
 
-public interface AnotherDefintions extends IPlugin3 {
+public interface AnotherDefintions extends ICommonPlugin3 {
 	String methodGetGreeting();
 }
