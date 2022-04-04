@@ -1,5 +1,6 @@
 package com.biit.plugins;
 
+import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
@@ -147,7 +148,7 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
     }
 
     @Override
-    public int compareTo(ISpringPlugin plugin) {
+    public int compareTo(IPlugin plugin) {
         return getPluginName().compareTo(plugin.getPluginName());
     }
 }

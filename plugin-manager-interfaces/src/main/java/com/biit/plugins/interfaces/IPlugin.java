@@ -6,7 +6,7 @@ import org.pf4j.ExtensionPoint;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public interface IPlugin extends ExtensionPoint {
+public interface IPlugin extends ExtensionPoint, Comparable<IPlugin> {
 
     String getPluginName();
 

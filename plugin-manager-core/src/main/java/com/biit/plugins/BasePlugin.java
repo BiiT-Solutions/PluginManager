@@ -1,5 +1,6 @@
 package com.biit.plugins;
 
+import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
@@ -147,7 +148,7 @@ public abstract class BasePlugin implements IStandardPlugin {
     }
 
     @Override
-    public int compareTo(IStandardPlugin plugin) {
+    public int compareTo(IPlugin plugin) {
         return getPluginName().compareTo(plugin.getPluginName());
     }
 

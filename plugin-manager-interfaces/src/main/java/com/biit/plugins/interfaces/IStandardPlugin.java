@@ -1,5 +1,5 @@
 package com.biit.plugins.interfaces;
 
-public interface IStandardPlugin extends IPlugin, Comparable<IStandardPlugin> {
+public interface IStandardPlugin extends IPlugin {
 
 }
