@@ -46,7 +46,7 @@ public class PluginController {
         return instance;
     }
 
-    public <T extends IStandardPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
+    public <T extends IPlugin> T getPlugin(Class<T> pluginInterface, String pluginName)
             throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(),
                 "Searching for plugin '" + pluginInterface + "' with name '" + pluginName + "'.");
@@ -90,7 +90,7 @@ public class PluginController {
      * @throws NoPluginFoundException
      * @throws DuplicatedPluginFoundException
      */
-    public <T extends IStandardPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
+    public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
                                                                   String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
         try {
             try {
