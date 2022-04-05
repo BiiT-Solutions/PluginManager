@@ -29,11 +29,11 @@ public class PluginManagerFactory {
     }
 
     private PluginManager getSpringBootPluginManager() {
-        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + Arrays.toString(pluginsLocations) + "' for plugins.");
         //Default configuration from application.properties.
         Set<String> pluginsPaths = new HashSet<>(Arrays.asList(pluginsLocations));
         //Getting from system environment.
         addSystemVariablePath(pluginsPaths);
+        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsPaths + "' for plugins.");
         System.setProperty("pf4j.pluginsDir", String.join(",", pluginsPaths));
         PluginManager pluginManager = new SpringPluginManager();
         PluginManagerLogger.info(this.getClass().getName(), "Folder for searching are '" + pluginManager.getPluginsRoots() + "'.");
@@ -47,9 +47,9 @@ public class PluginManagerFactory {
      */
     private PluginManager getDefaultPluginManager() {
         // create the plugin manager
-        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folders '" + Arrays.toString(pluginsLocations) + "' for plugins.");
         Set<String> pluginsPaths = new HashSet<>(Arrays.asList(pluginsLocations));
         addSystemVariablePath(pluginsPaths);
+        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folders '" + pluginsPaths + "' for plugins.");
         Path[] paths = pluginsPaths.stream().map(Paths::get).toArray(Path[]::new);
         PluginManager pluginManager = new DefaultPluginManager(paths) {
 
@@ -83,6 +83,9 @@ public class PluginManagerFactory {
             if (Files.isDirectory(folder)) {
                 pluginsPaths.add(folder.toString());
             }
+        } else {
+            PluginManagerLogger.debug(this.getClass().getName(), "No system variable found for '"
+                    + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "'.");
         }
     }
 }
