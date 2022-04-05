@@ -134,6 +134,8 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
 
     protected List<String> getSystemConfigurationSettings() {
         if (System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
+            PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins on path defined in system variable as '"
+                    + System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
             Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
                 try {
@@ -142,13 +144,21 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
                         return walk
                                 .filter(p -> !Files.isDirectory(p))   // not a directory
                                 .map(p -> p.toString().toLowerCase()) // convert path to string
-                                .filter(f -> f.endsWith(PLUGINS_CONFIG_FILES_EXTENSION))       // check end with
+                                .filter(f -> {
+                                    PluginManagerLogger.debug(this.getClass().getName(), "Found file '" + f + "'.");
+                                    return f.endsWith(PLUGINS_CONFIG_FILES_EXTENSION);
+                                })       // check end with
                                 .collect(Collectors.toList());        // collect all matched to a List
                     }
                 } catch (IOException e) {
                     PluginManagerLogger.warning(this.getClass().getName(), "Invalid folder '" + folder + "'.");
                 }
+            } else {
+                PluginManagerLogger.warning(this.getClass().getName(), "System variable '" + folder + "' is not a folder path.");
             }
+        } else {
+            PluginManagerLogger.debug(this.getClass().getName(), "No system variable found for '"
+                    + SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "'.");
         }
         return new ArrayList<>();
     }

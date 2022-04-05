@@ -1,6 +1,7 @@
 package com.biit.plugins.tests;
 
 import com.biit.plugins.PluginController;
+import com.biit.plugins.configuration.PluginConfigurationReader;
 import com.biit.plugins.helloworld.Greeting;
 import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
@@ -29,6 +30,11 @@ public class PluginLoaderTests extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private PluginController pluginController;
+
+    static {
+        //Set the system environment.
+        System.setProperty(PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER, "/opt/plugins/");
+    }
 
 
     @Test
