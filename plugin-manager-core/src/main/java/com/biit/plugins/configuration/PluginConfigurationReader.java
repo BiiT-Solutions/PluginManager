@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 @Component
 public class PluginConfigurationReader implements EmbeddedValueResolverAware {
-    public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER = "PLUGIN_CONFIG_PATH";
+    public static final String SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER = "PLUGINS_CONFIG_PATH";
     public static final String PLUGINS_CONFIG_FILES_EXTENSION = "conf";
     protected static final String SETTINGS_FILE = "settings.conf";
     private StringValueResolver resolver;
