@@ -90,7 +90,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
                 BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "' on folder '" +
-                        System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
+                        System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
             }
         });
     }
@@ -133,10 +133,10 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     }
 
     protected List<String> getSystemConfigurationSettings() {
-        if (System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
+        if (System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
             PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins on path defined in system variable as '"
-                    + System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
-            Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
+                    + System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
+            Path folder = Paths.get(System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
                 try {
                     // find files matched `png` file extension from folder C:\\test
