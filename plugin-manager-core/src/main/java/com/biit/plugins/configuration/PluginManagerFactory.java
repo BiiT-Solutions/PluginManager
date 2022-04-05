@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 public class PluginManagerFactory {
 
-    private final String pluginsLocations;
+    private final String[] pluginsLocations;
 
-    public PluginManagerFactory(@Value("${plugins.directory:}") String pluginsLocations) {
+    public PluginManagerFactory(@Value("${plugins.directory:}") String[] pluginsLocations) {
         this.pluginsLocations = pluginsLocations;
     }
 
@@ -24,10 +29,14 @@ public class PluginManagerFactory {
     }
 
     private PluginManager getSpringBootPluginManager() {
-        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsLocations + "' for plugins.");
-        System.setProperty("pf4j.pluginsDir", pluginsLocations);
+        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + Arrays.toString(pluginsLocations) + "' for plugins.");
+        //Default configuration from application.properties.
+        Set<String> pluginsPaths = new HashSet<>(Arrays.asList(pluginsLocations));
+        //Getting from system environment.
+        addSystemVariablePath(pluginsPaths);
+        System.setProperty("pf4j.pluginsDir", String.join(",", pluginsPaths));
         PluginManager pluginManager = new SpringPluginManager();
-        PluginManagerLogger.info(this.getClass().getName(), "Folder for searching is '" + pluginManager.getPluginsRoots() + "'.");
+        PluginManagerLogger.info(this.getClass().getName(), "Folder for searching are '" + pluginManager.getPluginsRoots() + "'.");
         return pluginManager;
     }
 
@@ -38,8 +47,11 @@ public class PluginManagerFactory {
      */
     private PluginManager getDefaultPluginManager() {
         // create the plugin manager
-        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsLocations + "' for plugins.");
-        PluginManager pluginManager = new DefaultPluginManager(Paths.get(pluginsLocations)) {
+        PluginManagerLogger.debug(this.getClass().getName(), "Scanning folders '" + Arrays.toString(pluginsLocations) + "' for plugins.");
+        Set<String> pluginsPaths = new HashSet<>(Arrays.asList(pluginsLocations));
+        addSystemVariablePath(pluginsPaths);
+        Path[] paths = pluginsPaths.stream().map(Paths::get).toArray(Path[]::new);
+        PluginManager pluginManager = new DefaultPluginManager(paths) {
 
             @Override
             protected PluginLoader createPluginLoader() {
@@ -62,5 +74,15 @@ public class PluginManagerFactory {
         PluginManagerLogger.debug(this.getClass().getName(), "Started plugins '" + pluginManager.getStartedPlugins() + "'.");
 
         return pluginManager;
+    }
+
+    private void addSystemVariablePath(Set<String> pluginsPaths) {
+        String systemVariable = System.getenv(PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER);
+        if (systemVariable != null) {
+            Path folder = Paths.get(systemVariable);
+            if (Files.isDirectory(folder)) {
+                pluginsPaths.add(folder.toString());
+            }
+        }
     }
 }

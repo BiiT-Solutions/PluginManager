@@ -134,7 +134,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
 
     protected List<String> getSystemConfigurationSettings() {
         if (System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
-            PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins on path defined in system variable as '"
+            PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins configuration on path defined in system variable as '"
                     + System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
             Path folder = Paths.get(System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
@@ -145,7 +145,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
                                 .filter(p -> !Files.isDirectory(p))   // not a directory
                                 .map(p -> p.toString().toLowerCase()) // convert path to string
                                 .filter(f -> {
-                                    PluginManagerLogger.debug(this.getClass().getName(), "Found file '" + f + "'.");
+                                    PluginManagerLogger.debug(this.getClass().getName(), "Found configuration file '" + f + "'.");
                                     return f.endsWith(PLUGINS_CONFIG_FILES_EXTENSION);
                                 })       // check end with
                                 .collect(Collectors.toList());        // collect all matched to a List
