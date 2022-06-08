@@ -163,4 +163,16 @@ public class PluginManagerLogger {
 	public static boolean isDebugEnabled() {
 		return logger.isDebugEnabled();
 	}
+
+	public static void debug(Class<?> clazz, String message) {
+		debug(clazz.getName(), message);
+	}
+
+	public static void info(Class<?> clazz, String message) {
+		info(clazz.getName(), message);
+	}
+
+	public static void warning(Class<?> clazz, String message) {
+		warning(clazz.getName(), message);
+	}
 }

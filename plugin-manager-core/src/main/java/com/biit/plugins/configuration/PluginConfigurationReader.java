@@ -63,40 +63,40 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     @PostConstruct
     public void loadPluginProperties() {
         String settingsFile = getSettingsFileName();
-        BiitCommonLogger.debug(this.getClass(), "Loading settings file for '" + settingsFile + "'.");
+        PluginManagerLogger.debug(this.getClass(), "Loading plugins settings file for '" + settingsFile + "'.");
         // Load settings as resource.
         if (settingsFile != null) {
             // using same name as jar file.
             if (resourceExist(settingsFile)) {
                 loadPropertiesFileInResources(settingsFile);
-                BiitCommonLogger.debug(this.getClass(), "Plugin using settings in resource folder '" + settingsFile + "'.");
+                PluginManagerLogger.debug(this.getClass(), "Plugin using settings in resource folder '" + settingsFile + "'.");
             }
         }
         // Load settings as file.
         settingsFile = getJarFolder() + "/" + getSettingsFileName();
-        BiitCommonLogger.debug(this.getClass(), "Searching for configuration file in '" + settingsFile + "'.");
+        PluginManagerLogger.debug(this.getClass(), "Searching for plugins configuration file in '" + settingsFile + "'.");
         if (fileExists(settingsFile)) {
             loadPropertiesFileInResources(settingsFile);
-            BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsFile + "'!");
+            PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsFile + "'!");
         }
         //Load settings in system environment file path
         getConfigurationSettings().forEach(settingsSystemFile -> {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
-                BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "'!");
+                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "'!");
             }
         });
         getSystemPropertyConfigurationSettings().forEach(settingsSystemFile -> {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
-                BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "' on folder '" +
+                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '" +
                         System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
             }
         });
         getSystemEnvConfigurationSettings().forEach(settingsSystemFile -> {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
-                BiitCommonLogger.debug(this.getClass(), "Found configuration file '" + settingsSystemFile + "' on folder '" +
+                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '" +
                         System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
             }
         });
