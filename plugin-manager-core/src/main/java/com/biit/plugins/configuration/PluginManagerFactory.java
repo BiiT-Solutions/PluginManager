@@ -16,6 +16,7 @@ import java.util.Set;
 
 @Configuration
 public class PluginManagerFactory {
+    public static final String SYSTEM_VARIABLE_PLUGINS_FOLDER = "PLUGINS_PATH";
 
     private final String[] pluginsLocations;
 
@@ -77,26 +78,26 @@ public class PluginManagerFactory {
     }
 
     private void addSystemVariablePath(Set<String> pluginsPaths) {
-        String systemVariable = System.getenv(PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER);
+        String systemVariable = System.getenv(SYSTEM_VARIABLE_PLUGINS_FOLDER);
         if (systemVariable != null) {
-            PluginManagerLogger.debug(this.getClass().getName(), "Env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER
+            PluginManagerLogger.debug(this.getClass().getName(), "Env variable '" + SYSTEM_VARIABLE_PLUGINS_FOLDER
                     + "' set as '" + systemVariable + "'.");
             String[] paths = systemVariable.split(",");
             for (String path : paths) {
                 Path folder = Paths.get(path);
                 if (Files.isDirectory(folder)) {
                     PluginManagerLogger.info(this.getClass().getName(), "Directory '"
-                            + folder.toString() + "' obtained from env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER
+                            + folder.toString() + "' obtained from env variable '" + SYSTEM_VARIABLE_PLUGINS_FOLDER
                             + "' added as plugin folder!");
                     pluginsPaths.add(folder.toString());
                 } else {
                     PluginManagerLogger.warning(this.getClass().getName(), "Directory '"
-                            + folder.toString() + "' defined on env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "' is invalid.");
+                            + folder.toString() + "' defined on env variable '" + SYSTEM_VARIABLE_PLUGINS_FOLDER + "' is invalid.");
                 }
             }
         } else {
             PluginManagerLogger.debug(this.getClass().getName(), "No system variable found for plugins directory '"
-                    + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "'.");
+                    + SYSTEM_VARIABLE_PLUGINS_FOLDER + "'.");
         }
     }
 }
