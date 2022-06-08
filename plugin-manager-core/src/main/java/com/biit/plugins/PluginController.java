@@ -1,9 +1,9 @@
 package com.biit.plugins;
 
 import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
-import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
+import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.exceptions.InvalidMethodParametersException;
 import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
 import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;

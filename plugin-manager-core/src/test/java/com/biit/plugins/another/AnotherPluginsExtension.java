@@ -1,8 +1,7 @@
 package com.biit.plugins.another;
 
-import org.pf4j.Extension;
-
 import com.biit.plugins.BasePlugin;
+import org.pf4j.Extension;
 
 @Extension
 public class AnotherPluginsExtension extends BasePlugin implements AnotherDefintions {

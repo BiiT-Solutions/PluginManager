@@ -3,8 +3,8 @@ package com.biit.plugins.tests;
 import com.biit.plugins.PluginController;
 import com.biit.plugins.configuration.PluginConfigurationReader;
 import com.biit.plugins.helloworld.Greeting;
-import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.interfaces.ISpringPlugin;
+import com.biit.plugins.interfaces.IStandardPlugin;
 import com.biit.plugins.springboot.SpringTestPluginApplication;
 import com.biit.plugins.test.interfaces.IStandardPlugin2;
 import org.pf4j.PluginManager;
@@ -23,7 +23,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringTestPluginApplication.class)
 @Test(groups = {"pluginLoader"})
 public class PluginLoaderTests extends AbstractTestNGSpringContextTests {
-    private final static String PLUGINS_FOLDER = "src/test/plugins";
 
     @Autowired
     private PluginManager pluginManager;

@@ -180,7 +180,6 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
             Path folder = Paths.get(System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
                 try {
-                    // find files matched `png` file extension from folder C:\\test
                     try (Stream<Path> walk = Files.walk(folder, 1)) {
                         return walk
                                 .filter(p -> !Files.isDirectory(p))   // not a directory
@@ -220,6 +219,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
 
             // load a properties file
             propertiesLoaded.load(input);
+            PluginManagerLogger.debug(this.getClass().getName(), "Settings found '" + propertiesLoaded.stringPropertyNames() + "'.");
             propertiesLoaded.stringPropertyNames().forEach(key -> properties.put(key, propertiesLoaded.getProperty(key)));
         } catch (IOException ex) {
             PluginManagerLogger.warning(this.getClass().getName(), "No settings file found for '" + propertiesFile + "'.");

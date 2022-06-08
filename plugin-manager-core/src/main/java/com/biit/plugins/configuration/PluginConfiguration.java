@@ -2,7 +2,6 @@ package com.biit.plugins.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pf4j.PluginManager;
-import org.pf4j.spring.SpringPluginManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

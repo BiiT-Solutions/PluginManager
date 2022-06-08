@@ -36,7 +36,7 @@ public class PluginManagerFactory {
         PluginManagerLogger.debug(this.getClass().getName(), "Scanning folder '" + pluginsPaths + "' for plugins.");
         System.setProperty("pf4j.pluginsDir", String.join(",", pluginsPaths));
         PluginManager pluginManager = new SpringPluginManager();
-        PluginManagerLogger.info(this.getClass().getName(), "Folder for searching are '" + pluginManager.getPluginsRoots() + "'.");
+        PluginManagerLogger.info(this.getClass().getName(), "Folders for searching are '" + pluginManager.getPluginsRoots() + "'.");
         return pluginManager;
     }
 
@@ -79,12 +79,23 @@ public class PluginManagerFactory {
     private void addSystemVariablePath(Set<String> pluginsPaths) {
         String systemVariable = System.getenv(PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER);
         if (systemVariable != null) {
-            Path folder = Paths.get(systemVariable);
-            if (Files.isDirectory(folder)) {
-                pluginsPaths.add(folder.toString());
+            PluginManagerLogger.debug(this.getClass().getName(), "Env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER
+                    + "' set as '" + systemVariable + "'.");
+            String[] paths = systemVariable.split(",");
+            for (String path : paths) {
+                Path folder = Paths.get(path);
+                if (Files.isDirectory(folder)) {
+                    PluginManagerLogger.info(this.getClass().getName(), "Directory '"
+                            + folder.toString() + "' obtained from env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER
+                            + "' added as plugin folder!");
+                    pluginsPaths.add(folder.toString());
+                } else {
+                    PluginManagerLogger.warning(this.getClass().getName(), "Directory '"
+                            + folder.toString() + "' defined on env variable '" + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "' is invalid.");
+                }
             }
         } else {
-            PluginManagerLogger.debug(this.getClass().getName(), "No system variable found for '"
+            PluginManagerLogger.debug(this.getClass().getName(), "No system variable found for plugins directory '"
                     + PluginConfigurationReader.SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER + "'.");
         }
     }

@@ -31,7 +31,7 @@ public class TestPluginControllerTests extends AbstractTestNGSpringContextTests 
 
     @Test
     public void loadIPlugin() throws NoPluginFoundException, DuplicatedPluginFoundException {
-        // IPLugin2 must be in the plugin. If not
+        // IPlugin2 must be in the plugin. If not
         // java.lang.InstantiationException appears.
         List<IStandardPlugin2> plugins2 = pluginController.getPlugins(IStandardPlugin2.class);
         Assert.assertEquals(plugins2.size(), 1);
@@ -49,7 +49,7 @@ public class TestPluginControllerTests extends AbstractTestNGSpringContextTests 
             Assert.assertEquals(plugin.getPluginMethods().size(), 2);
         }
 
-        // Load all toghether
+        // Load all together
         List<IStandardPlugin> plugins1 = pluginController.getPlugins(IStandardPlugin.class);
         //IPlugin2, IPlugin3 extends IPlugin
         Assert.assertEquals(plugins1.size(), 2);
