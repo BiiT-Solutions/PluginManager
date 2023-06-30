@@ -35,6 +35,10 @@ public class PluginController {
 
     public PluginController(PluginManager pluginManager) {
         this.pluginManager = pluginManager;
+        pluginManager.stopPlugins();
+        pluginManager.unloadPlugins();
+        pluginManager.loadPlugins();
+        pluginManager.startPlugins();
     }
 
     @PostConstruct
