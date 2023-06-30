@@ -1,6 +1,7 @@
 package com.biit.plugins.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PreDestroy;
 import org.pf4j.PluginManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PreDestroy;
 
 @Configuration
 public class PluginConfiguration implements BeanFactoryAware {

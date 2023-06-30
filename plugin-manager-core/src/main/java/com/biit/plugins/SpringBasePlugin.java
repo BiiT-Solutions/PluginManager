@@ -8,18 +8,22 @@ import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The plugins that will extend this class
  */
 public abstract class SpringBasePlugin implements ISpringPlugin {
-    public final static String METHODS_PREFIX_TO_SELECT = "method";
+    public static final String METHODS_PREFIX_TO_SELECT = "method";
     private Map<String, Method> methodsMap;
 
     public SpringBasePlugin() {
         methodsMap = new HashMap<>();
-        List<Method> pluginMethods = getPluginMethods();
+        final List<Method> pluginMethods = getPluginMethods();
         for (Method pluginMethod : pluginMethods) {
             methodsMap.put(pluginMethod.getName(), pluginMethod);
         }
@@ -30,7 +34,7 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
      */
     @Override
     public List<Method> getPluginMethods() {
-        List<Method> methods = new ArrayList<Method>();
+        final List<Method> methods = new ArrayList<Method>();
         for (Method method : this.getClass().getMethods()) {
             if (method.getName().startsWith(METHODS_PREFIX_TO_SELECT)) {
                 methods.add(method);
@@ -55,11 +59,11 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
      */
     @Override
     public List<String> getPluginMethodParametersString(Method method) {
-        List<String> parameters = new ArrayList<String>();
+        final List<String> parameters = new ArrayList<String>();
         int parameterNumber = 0;
         for (Class<?> parameter : method.getParameterTypes()) {
             parameterNumber++;
-            Class<?> componentType = parameter.getComponentType();
+            final Class<?> componentType = parameter.getComponentType();
             if (componentType != null) {
                 // The parameter is an array
                 // We want the internal class of the array
@@ -88,11 +92,11 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
             case "Double":
             case "Float":
                 return "Number";
-
             case "String":
                 return "Text";
+            default:
+                return className;
         }
-        return className;
     }
 
     protected Method getMethod(String methodName) {
@@ -113,7 +117,7 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
             return false;
         }
         for (Class<?> methodParameter : method.getParameterTypes()) {
-            Class<?> methodComponentType = methodParameter.getComponentType();
+            final Class<?> methodComponentType = methodParameter.getComponentType();
             if (methodComponentType != null) {
                 return false;
             } else {
@@ -128,7 +132,7 @@ public abstract class SpringBasePlugin implements ISpringPlugin {
 
     @Override
     public Object executeMethod(String methodName, Object... parameters) throws MethodInvocationException {
-        Method methodFound = getMethod(methodName);
+        final Method methodFound = getMethod(methodName);
         if (methodFound == null) {
             throw new NoMethodFoundException("The method '" + methodName + "' was not found");
         } else {

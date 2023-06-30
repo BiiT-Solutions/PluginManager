@@ -2,6 +2,7 @@ package com.biit.plugins.configuration;
 
 import com.biit.logger.BiitCommonLogger;
 import com.biit.plugins.logger.PluginManagerLogger;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.core.io.ClassPathResource;
@@ -10,7 +11,6 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringValueResolver;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +20,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,15 +94,15 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         getSystemPropertyConfigurationSettings().forEach(settingsSystemFile -> {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
-                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '" +
-                        System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
+                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '"
+                        + System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
             }
         });
         getSystemEnvConfigurationSettings().forEach(settingsSystemFile -> {
             if (fileExists(settingsSystemFile)) {
                 loadPropertiesFileAbsolutePath(settingsSystemFile);
-                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '" +
-                        System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
+                PluginManagerLogger.debug(this.getClass(), "Found plugins configuration file '" + settingsSystemFile + "' on folder '"
+                        + System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.!");
             }
         });
     }
@@ -114,7 +119,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         if (filePathString == null) {
             return false;
         }
-        File file = new File(filePathString);
+        final File file = new File(filePathString);
         return file.exists() && !file.isDirectory();
     }
 
@@ -122,7 +127,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins configuration on resources '"
                 + pluginsLocations + "'.");
         if (pluginsLocations != null) {
-            Path folder = Paths.get(pluginsLocations);
+            final Path folder = Paths.get(pluginsLocations);
             if (Files.isDirectory(folder)) {
                 try {
                     // find files matched `png` file extension from folder C:\\test
@@ -145,7 +150,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         if (System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
             PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins configuration on path defined in system property as '"
                     + System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
-            Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
+            final Path folder = Paths.get(System.getProperty(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
                 try {
                     // find files matched `png` file extension from folder C:\\test
@@ -177,7 +182,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
         if (System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) != null) {
             PluginManagerLogger.debug(this.getClass().getName(), "Searching plugins configuration on path defined in system variable as '"
                     + System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER) + "'.");
-            Path folder = Paths.get(System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
+            final Path folder = Paths.get(System.getenv(SYSTEM_VARIABLE_PLUGINS_CONFIG_FOLDER));
             if (Files.isDirectory(folder)) {
                 try {
                     try (Stream<Path> walk = Files.walk(folder, 1)) {
@@ -204,9 +209,9 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     }
 
     private void loadPropertiesFileInResources(String propertiesFile) {
-        Resource resource = new ClassPathResource(propertiesFile);
+        final Resource resource = new ClassPathResource(propertiesFile);
         try {
-            Properties propertiesLoaded = PropertiesLoaderUtils.loadProperties(resource);
+            final Properties propertiesLoaded = PropertiesLoaderUtils.loadProperties(resource);
             propertiesLoaded.stringPropertyNames().forEach(key -> properties.put(key, propertiesLoaded.getProperty(key)));
         } catch (IOException e) {
             PluginManagerLogger.warning(this.getClass().getName(), "No settings file found for '" + propertiesFile + "'.");
@@ -215,7 +220,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
 
     private void loadPropertiesFileAbsolutePath(String propertiesFile) {
         try (InputStream input = new FileInputStream(propertiesFile)) {
-            Properties propertiesLoaded = new Properties();
+            final Properties propertiesLoaded = new Properties();
 
             // load a properties file
             propertiesLoaded.load(input);
@@ -256,7 +261,7 @@ public class PluginConfigurationReader implements EmbeddedValueResolverAware {
     }
 
     protected String getJarName() {
-        URL settingsUrl = getJarUrl();
+        final URL settingsUrl = getJarUrl();
         if (settingsUrl == null || !settingsUrl.getPath().contains(".jar")) {
             return null;
         }

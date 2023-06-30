@@ -9,13 +9,17 @@ import com.biit.plugins.interfaces.exceptions.MethodInvocationException;
 import com.biit.plugins.interfaces.exceptions.NoMethodFoundException;
 import com.biit.plugins.interfaces.exceptions.NoPluginFoundException;
 import com.biit.plugins.logger.PluginManagerLogger;
+import jakarta.annotation.PostConstruct;
 import org.pf4j.ExtensionPoint;
 import org.pf4j.PluginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Singleton in charge of managing the plugins of the application
@@ -38,7 +42,7 @@ public class PluginController {
         setInstance(this);
     }
 
-    public synchronized static void setInstance(PluginController pluginController) {
+    public static synchronized void setInstance(PluginController pluginController) {
         PluginController.instance = pluginController;
     }
 
@@ -68,7 +72,7 @@ public class PluginController {
 
     public ExtensionPoint getPlugin(String pluginName) throws NoPluginFoundException, DuplicatedPluginFoundException {
         PluginManagerLogger.debug(this.getClass().getName(), "Searching for plugin '" + pluginName + "'.");
-        List<?> plugins = pluginManager.getExtensions(pluginName);
+        final List<?> plugins = pluginManager.getExtensions(pluginName);
         if (plugins.isEmpty()) {
             throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
         }
@@ -90,20 +94,21 @@ public class PluginController {
      * @throws NoPluginFoundException
      * @throws DuplicatedPluginFoundException
      */
-    public <T extends IPlugin> Object executePluginMethod(Class<T> pluginInterface, String pluginName,
-                                                                  String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
+    public <T extends IPlugin> Object executePluginMethod(
+            Class<T> pluginInterface, String pluginName,
+            String methodName, Object... parameters) throws NoPluginFoundException, DuplicatedPluginFoundException {
         try {
             try {
                 PluginManagerLogger.debug(this.getClass().getName(),
                         "Executing '" + methodName + "' with parameters '" + Arrays.toString(parameters) + "'.");
-                T plugin = getPlugin(pluginInterface, pluginName);
+                final T plugin = getPlugin(pluginInterface, pluginName);
                 if (plugin == null) {
                     PluginManagerLogger.warning(this.getClass().getName(), "No plugin exists with name '" + pluginName + "'.");
                     throw new NoPluginFoundException("No plugin exists with name '" + pluginName + "'.");
                 }
                 return plugin.executeMethod(methodName, parameters);
             } catch (MethodInvocationException e) {
-                StringBuilder sb = new StringBuilder();
+                final StringBuilder sb = new StringBuilder();
                 for (Object parameter : parameters) {
                     sb.append(parameter).append(" (").append(parameter.getClass().getName()).append(")");
                 }
@@ -137,7 +142,7 @@ public class PluginController {
     }
 
     public Map<Class<?>, List<?>> getAllPluginsByClass() {
-        Map<Class<?>, List<?>> pluginsFound = new HashMap<>();
+        final Map<Class<?>, List<?>> pluginsFound = new HashMap<>();
         try {
             pluginsFound.put(IStandardPlugin.class, getPlugins(IStandardPlugin.class));
         } catch (NoPluginFoundException | DuplicatedPluginFoundException e) {
