@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.biit-solutions.drools</groupId>
         <artifactId>plugin-manager</artifactId>
-        <version>2.1.103-SNAPSHOT</version>
+        <version>2.1.103</version>
     </parent>
 
     <scm>
         <connection>scm:git:git.biit-solutions.com:Java/PluginManager.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:Java/PluginManager.git</developerConnection>
-        <tag>plugin-manager</tag>
+        <tag>plugin-manager-2.1.103</tag>
     </scm>
 
     <properties>

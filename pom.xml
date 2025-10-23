@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.biit-solutions.drools</groupId>
     <artifactId>plugin-manager</artifactId>
-    <version>2.1.103-SNAPSHOT</version>
+    <version>2.1.103</version>
     <name>Plugin Manager</name>
     <packaging>pom</packaging>
 
@@ -12,7 +11,7 @@
         <groupId>com.biit-solutions</groupId>
         <artifactId>versions</artifactId>
         <version>[1.0,1.1)</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <licenses>
@@ -50,7 +49,7 @@
         <connection>scm:git:ssh://git@github.com/BiiT-Solutions/PluginManager.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/BiiT-Solutions/PluginManager.git</developerConnection>
         <url>https://github.com/BiiT-Solutions/PluginManager.git</url>
-        <tag>plugin-manager</tag>
+        <tag>plugin-manager-2.1.103</tag>
     </scm>
 
     <build>
