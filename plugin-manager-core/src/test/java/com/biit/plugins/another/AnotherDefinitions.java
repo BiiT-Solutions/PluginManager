@@ -1,8 +1,8 @@
-package com.biit.plugins.interfaces.exceptions;
+package com.biit.plugins.another;
 
 /*-
  * #%L
- * Plugin Manager (Interfaces)
+ * Plugin Manager (Core)
  * %%
  * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
  * %%
@@ -21,10 +21,8 @@ package com.biit.plugins.interfaces.exceptions;
  * #L%
  */
 
-public class InvalidMethodParametersException extends MethodInvocationException {
-    private static final long serialVersionUID = 2781594922476539377L;
+import com.biit.plugins.test.interfaces.IStandardPlugin3;
 
-    public InvalidMethodParametersException(String message) {
-        super(message);
-    }
+public interface AnotherDefinitions extends IStandardPlugin3 {
+	String methodGetGreeting();
 }

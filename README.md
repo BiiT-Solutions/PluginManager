@@ -4,7 +4,7 @@ Add the dependency on the maven pom.xml
 
 ```
 <dependency>
-    <groupId>com.biit</groupId>
+    <groupId>com.biit-solutions</groupId>
     <artifactId>plugin-manager-core</artifactId>
     <version>${plugin-manager.version}</version>
 </dependency>
